@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/ruby-ldap/ruby-net-ldap.git
+  revision: ea21ef9478b4af785808deab8a40b89936618ef2
+  specs:
+    net-ldap (0.12.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -176,6 +182,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   jbuilder (~> 2.0)
   jquery-rails
+  net-ldap!
   pg (~> 0.18)
   puma
   rails (>= 5.0.0.beta1, < 5.1)
