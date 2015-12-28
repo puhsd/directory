@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= @user.displayname %></h1>
+<%= link_to "<i class='fa fa-refresh'></i> LDAP".html_safe, import_users_path(u: @user.username), :method => :post, :class => 'btn' %>
+<p>
+  <strong>Object guid:</strong>
+  <%= @user.object_guid %>
+</p>
+
+<p>
+  <strong>Username:</strong>
+  <%= @user.username %>
+</p>
+
+<p>
+  <strong>Ldap imported at:</strong>
+  <%= @user.ldap_imported_at %>
+</p>
+
+<p>
+  <strong>Ldap attributes:</strong>
+  <ul>
+	  <% @user.ldap_attributes.each do |key, value| %>
+  		<%= content_tag :li do %>
+  			<%= content_tag :strong, "#{key}: " %>
+  			<%= value %>
+  		<% end %>
+	  <% end %>
+	</ul>
+</p>
+
+<%= link_to 'Back', users_path %>
