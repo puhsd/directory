@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Users</h1>
+<%= link_to "<i class='fa fa-refresh'></i> LDAP".html_safe, import_users_path, :method => :post, :class => 'btn' %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= sort_link(@q, :sn, 'Last Name', default_order: :asc) %></th>
+      <th><%= sort_link(@q, :givenname, 'Given Name', default_order: :asc)  %></th>
+      <th><%= sort_link(@q, :title, 'Title', default_order: :asc)  %></th>
+      <th>Extension</th>
+      <th><%= sort_link(@q, :physicaldeliveryofficename, 'Site', default_order: :asc)  %></th>
+      <th><%= sort_link(@q, :updated_at, 'Updated', default_order: :desc)  %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <%= content_tag :tr, class: ("danger" if user.disabled?) do -%>
+        <td><%= link_to user.sn, user %></td>
+        <td><%= link_to user.givenname, user %></td>
+        <td><%= user.title %></td>
+        <td><%= user.ipphone%></td>
+        <td><%= user.physicaldeliveryofficename %></td>
+        <td><%= local_time(user.updated_at, :short) %></td>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
