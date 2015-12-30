@@ -1,32 +1,33 @@
-class User < ApplicationRecord
+class User < ActiveRecord::Base
+# class User < ApplicationRecord
 
 	LDAP_CONFIG = YAML.load(ERB.new(File.read("#{Rails.root}/config/ldap.yml")).result)[Rails.env]
 
   LDAP_CONFIG["read-attributes"].each do |key|
     # attr_accessible key
-    
+
     define_method(key) do
       ldap_attributes && ldap_attributes[key]
     end
-    
+
     define_method("#{key}=") do |value|
       self.ldap_attributes = (ldap_attributes || {}).merge(key => value)
     end
   end
 
-  ransacker :sn do |parent|    
+  ransacker :sn do |parent|
     Arel::Nodes::InfixOperation.new('->', parent.table[:ldap_attributes], Arel::Nodes.build_quoted('sn'))
   end
 
-  ransacker :givenname do |parent|    
+  ransacker :givenname do |parent|
     Arel::Nodes::InfixOperation.new('->', parent.table[:ldap_attributes], Arel::Nodes.build_quoted('givenname'))
   end
 
-    ransacker :title do |parent|    
+    ransacker :title do |parent|
     Arel::Nodes::InfixOperation.new('->', parent.table[:ldap_attributes], Arel::Nodes.build_quoted('title'))
   end
 
-  ransacker :physicaldeliveryofficename do |parent|    
+  ransacker :physicaldeliveryofficename do |parent|
     Arel::Nodes::InfixOperation.new('->', parent.table[:ldap_attributes], Arel::Nodes.build_quoted('physicaldeliveryofficename'))
   end
 
@@ -110,5 +111,25 @@ class User < ApplicationRecord
         end
       end
   end #Import
+
+
+	def self.from_omniauth(auth)
+		puts "this -----"
+		# puts auth.slice(:info)
+		# puts auth.slice(:info)
+		puts auth.info.email
+
+		puts "end this -----"
+		user = User.find_by(username: auth.info.email.split("@").first)
+    # where(auth.slice(:provider, :uid)).first_or_initialize.tap do |user|
+      # user.provider = auth.provider
+      # user.uid = auth.uid
+      # user.name = auth.info.name
+      # user.oauth_token = auth.credentials.token
+      # user.oauth_expires_at = Time.at(auth.credentials.expires_at)
+      # user.save!
+    # end
+  end
+
 
 end
