@@ -1,32 +1,69 @@
-<p id="notice"><%= notice %></p>
+<!-- <p id="notice"><%= notice %></p> -->
 
-<h1><%= @user.displayname %></h1>
-<%= link_to "<i class='fa fa-refresh'></i> LDAP".html_safe, import_users_path(u: @user.username), :method => :post, :class => 'btn' %>
-<p>
-  <strong>Object guid:</strong>
-  <%= @user.object_guid %>
-</p>
 
-<p>
-  <strong>Username:</strong>
-  <%= @user.username %>
-</p>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <!-- <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> -->
+          <%= @user.displayname %>
+        <!-- </a> -->
+        <% if current_user %>
+          <%= link_to "<i class='fa fa-refresh'></i> LDAP".html_safe, import_users_path(u: @user.username), :method => :post, :class => 'pull-right' %>
+        <% end %>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        <ul>
+          <li>
+            <strong>Object guid:</strong>
+            <%= @user.object_guid %>
+          </li>
+          <li>
+            <strong>Username:</strong>
+            <%= @user.username %>
+          </li>
+          <li>
+            <strong>Ldap imported at:</strong>
+            <%= @user.ldap_imported_at %>
+          </li>
+          <li>
+            <strong>Ldap imported at:</strong>
+            <%= @user.ldap_imported_at %>
+          </li>
+          <li>
+            <strong>Ldap attributes:</strong>
+            <ul>
+          	  <% @user.ldap_attributes.each do |key, value| %>
+            		<%= content_tag :li do %>
+            			<%= content_tag :strong, "#{key}: " %>
+                  <% if key == "memberof" %>
+                    <% groups = eval(value) %>
+                    <ul>
+                        <% groups.each do |v| %>
+                          <%= content_tag :li do %>
+                            <%= v.split(",")[0].gsub("CN=","")  %>
+                          <% end %>
+                        <% end %>
+                    </ul>
+                  <% else %>
+                     <%= value %>
+                  <% end %>
+            		<% end %>
+          	  <% end %>
+          	</ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 
-<p>
-  <strong>Ldap imported at:</strong>
-  <%= @user.ldap_imported_at %>
-</p>
 
-<p>
-  <strong>Ldap attributes:</strong>
-  <ul>
-	  <% @user.ldap_attributes.each do |key, value| %>
-  		<%= content_tag :li do %>
-  			<%= content_tag :strong, "#{key}: " %>
-  			<%= value %>
-  		<% end %>
-	  <% end %>
-	</ul>
-</p>
+
+
+
+
 
 <%= link_to 'Back', users_path %>

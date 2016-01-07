@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 # class User < ApplicationRecord
+  enum access_level: { user: 0, manager: 1, admin: 2 }
+
 
 	LDAP_CONFIG = YAML.load(ERB.new(File.read("#{Rails.root}/config/ldap.yml")).result)[Rails.env]
 
