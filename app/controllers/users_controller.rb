@@ -61,10 +61,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def update_access(access_level = 0)
-    user.acce
-  end
-
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
@@ -76,7 +72,7 @@ class UsersController < ApplicationController
   end
 
   def import
-    authorize(@user)
+    authorize(current_user, @user)
     if params[:u]
       @user = User.find_by(username: params[:u])
       if User.import_from_ldap(params[:u])
