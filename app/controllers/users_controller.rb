@@ -1,12 +1,19 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update]
+  # after_action :verify_authorized, except: [:index, :show, :edit]
 
   # GET /users
   # GET /users.json
   def index
-    @users = User.all.order("ldap_attributes -> 'sn'")
+
+    # @users = (params[:u] != "" ? User.all.order("ldap_attributes -> 'sn'") : User.find(:all, :conditions => ["id != ?", params[:u]]))
+    # @users = User.where(["id != ?", params[:u]])
+    # @users = User.search(params[:q])
+
+    puts params[:q]
 
     @q = User.ransack(params[:q])
+    puts @q.result.name
     @users = @q.result
   end
 
@@ -54,6 +61,10 @@ class UsersController < ApplicationController
     end
   end
 
+  def update_access(access_level = 0)
+    user.acce
+  end
+
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
@@ -65,6 +76,7 @@ class UsersController < ApplicationController
   end
 
   def import
+    authorize(@user)
     if params[:u]
       @user = User.find_by(username: params[:u])
       if User.import_from_ldap(params[:u])
@@ -90,7 +102,8 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:object_guid, :username, :ldap_imported_at, :ldap_attributes)
+      # params.require(:user).permit(:object_guid, :username, :ldap_imported_at, :ldap_attributes)
+      params.require(:user).permit(:access_level)
     end
 
 end

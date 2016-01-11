@@ -8,14 +8,29 @@
         <!-- <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> -->
           <%= @user.displayname %>
         <!-- </a> -->
-        <% if current_user %>
-          <%= link_to "<i class='fa fa-refresh'></i> LDAP".html_safe, import_users_path(u: @user.username), :method => :post, :class => 'pull-right' %>
-        <% end %>
+
       </h4>
     </div>
+
+<div class="btn-group pull-right ">
+    <%= link_to 'Back', users_path, :class => 'btn btn-primary'  %>
+    <% if UserPolicy.new(current_user,@user).import?  %>
+      <%= link_to "<i class='fa fa-refresh'></i> LDAP".html_safe, import_users_path(u: @user.username), :method => :post, :class => 'btn btn-primary' %>
+    <% end %>
+    <div class="pull-right">
+      <% if UserPolicy.new(current_user,@user).update? %>
+            <%= render 'access_level_form', user: @user%>
+      <% end %>
+    </div>
+</div>
+
     <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
       <div class="panel-body">
         <ul>
+          <li>
+            <strong>Access Level:</strong>
+            <%= @user.access_level %>
+          </li>
           <li>
             <strong>Object guid:</strong>
             <%= @user.object_guid %>
@@ -57,13 +72,7 @@
         </ul>
       </div>
     </div>
+
   </div>
+
 </div>
-
-
-
-
-
-
-
-<%= link_to 'Back', users_path %>
