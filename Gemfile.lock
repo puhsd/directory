@@ -156,6 +156,8 @@ GEM
     polyamorous (1.3.0)
       activerecord (>= 3.0)
     puma (2.15.3)
+    pundit (1.0.1)
+      activesupport (>= 3.0.0)
     rack (2.0.0.alpha)
       json
     rack-test (0.6.3)
@@ -238,6 +240,7 @@ DEPENDENCIES
   omniauth-google-oauth2
   pg (~> 0.18)
   puma
+  pundit
   rails (>= 5.0.0.beta1, < 5.1)
   ransack!
   sass-rails (>= 3.2)

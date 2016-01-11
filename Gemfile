@@ -21,6 +21,9 @@ gem 'jbuilder', '~> 2.0'
 # Use Puma as the app server
 gem 'puma'
 
+# pundit used for authorization
+gem 'pundit'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

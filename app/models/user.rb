@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
     Arel::Nodes::InfixOperation.new('->', parent.table[:ldap_attributes], Arel::Nodes.build_quoted('givenname'))
   end
 
-    ransacker :title do |parent|
+  ransacker :title do |parent|
     Arel::Nodes::InfixOperation.new('->', parent.table[:ldap_attributes], Arel::Nodes.build_quoted('title'))
   end
 
@@ -115,13 +115,8 @@ class User < ActiveRecord::Base
   end #Import
 
 
-	def self.from_omniauth(auth)
-		puts "this -----"
-		# puts auth.slice(:info)
-		# puts auth.slice(:info)
-		puts auth.info.email
 
-		puts "end this -----"
+	def self.from_omniauth(auth)
 		user = User.find_by(username: auth.info.email.split("@").first)
     # where(auth.slice(:provider, :uid)).first_or_initialize.tap do |user|
       # user.provider = auth.provider
