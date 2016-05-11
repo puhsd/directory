@@ -83,35 +83,36 @@ class User < ActiveRecord::Base
     @attrs = LDAP_CONFIG["read-attributes"]
 
     @ldap.search( :base => @ldap.base, :filter => @filter, :attributes => @attrs, :return_result => false) do |entry|
-      user = User.find_or_create_by(username: entry["sAMAccountName"].first.downcase)
-        if user.new_record? || user.object_guid.blank?
-          user.update_attribute(:object_guid, entry["objectGUID"].first.unpack("H*").first.to_s)
-        end
+      user = User.find_or_create_by(object_guid: entry["objectGUID"].first.unpack("H*").first.to_s)
+      
+      if user.new_record?
+        user.update_attribute(username: entry["sAMAccountName"].first.downcase)
+      end
 
-        @attrs.each do |key|
-          value = entry[key.to_s]
-          unless key.to_s == "objectguid"
-            user.send("#{key}=", "") if value.count == 0
-            user.send("#{key}=", value.first.to_s) if value.count == 1
-            if value.count > 1
-              value_array = []
-              value.each do |v|
-                value_array << v
-              end
-              user.send("#{key}=", value_array)
+      @attrs.each do |key|
+        value = entry[key.to_s]
+        unless key.to_s == "objectguid"
+          user.send("#{key}=", "") if value.count == 0
+          user.send("#{key}=", value.first.to_s) if value.count == 1
+          if value.count > 1
+            value_array = []
+            value.each do |v|
+              value_array << v
             end
-          end
-        end
-
-        if user.new_record?
-          user.update_column(:ldap_imported_at, Time.now)
-        else
-          if user.changed?
-            user.ldap_imported_at =  Time.now
-            user.save
+            user.send("#{key}=", value_array)
           end
         end
       end
+
+      if user.new_record?
+        user.update_column(:ldap_imported_at, Time.now)
+      else
+        if user.changed?
+          user.ldap_imported_at =  Time.now
+          user.save
+        end
+      end
+    end
   end #Import
 
 
