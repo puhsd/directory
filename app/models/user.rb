@@ -41,6 +41,14 @@ class User < ActiveRecord::Base
   	!enabled?
   end
 
+  def imagefile
+     "images/#{self.username}.jpg" if File.file?(Rails.root+"public/images/#{self.username}.jpg")
+  end
+
+  def site
+      self.physicaldeliveryofficename
+  end
+  
   def update_tracked_fields!(request)
     old_current, new_current = self.current_sign_in_at, Time.now.utc
     self.last_sign_in_at     = old_current || new_current
@@ -84,10 +92,12 @@ class User < ActiveRecord::Base
 
     @ldap.search( :base => @ldap.base, :filter => @filter, :attributes => @attrs, :return_result => false) do |entry|
       user = User.find_or_create_by(object_guid: entry["objectGUID"].first.unpack("H*").first.to_s)
-      
-      if user.new_record?
-        user.update_attribute(username: entry["sAMAccountName"].first.downcase)
-      end
+
+      user.username = entry["sAMAccountName"].first.downcase
+
+      # if user.new_record?
+      #   user.update_attribute(username: entry["sAMAccountName"].first.downcase)
+      # end
 
       @attrs.each do |key|
         value = entry[key.to_s]
@@ -118,7 +128,12 @@ class User < ActiveRecord::Base
 
 
 	def self.from_omniauth(auth)
+
+    User.import_from_ldap(auth.info.email.split("@").first)
+
 		user = User.find_by(username: auth.info.email.split("@").first)
+
+    return user
     # where(auth.slice(:provider, :uid)).first_or_initialize.tap do |user|
       # user.provider = auth.provider
       # user.uid = auth.uid
