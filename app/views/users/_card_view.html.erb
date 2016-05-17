@@ -1,0 +1,45 @@
+
+<div class="col-md-6" >
+  <div class="panel panel-default" style='background-image: url("http://drive.google.com/uc?export=download&id=0B8hESEOJZ2h-MVpJX2tGTTVKTUE");  background-repeat:no-repeat;
+    background-position:right bottom; '>
+      <div class="panel-heading" role="tab" id="headingOne">
+        <h4 class="panel-title">
+          <!-- <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> -->
+            <!-- <%= user.physicaldeliveryofficename != "" ? user.physicaldeliveryofficename : "PUHSD GUEST"%><br/> -->
+            <%= user.title != "" ? user.title : "-"%>
+          <!-- </a> -->
+        </h4>
+      </div>
+      <div class="panel-body"  style="min-height:226px; height:auto!important; height:226px;">
+          <div class="col-md-4">
+            <% if File.file?(Rails.root+"public/images/#{user.username}.jpg") %>
+              <img class="img-responsive pull-right" src="/images/<%= user.username %>.jpg" alt="<%= user.displayname %>" title="<%= user.displayname %>" >
+            <% end %>
+          </div>
+
+
+        <div class="col-md-8" >
+
+          <p>
+              <small>Name:</small><br/>
+              <strong><%= user.displayname %></strong>
+          </p>
+          <p>
+              <small>Mail:</small><br/>
+              <strong><%= user.mail %></strong>
+            </p>
+            <!-- <p>
+              <small>Title:</small><br/>
+              <strong><%= user.title %></strong>
+            </p> -->
+            <p>
+              <small>Phone Extention:</small><br/>
+              <strong><%= user.ipphone %></strong>&nbsp;
+            </p>
+
+        </div>
+
+      </div>
+
+    </div>
+</div>

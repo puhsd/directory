@@ -1,0 +1,75 @@
+<!-- <p id="notice"><%= notice %></p> -->
+
+
+
+  <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingOne">
+        <h4 class="panel-title">
+          <!-- <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> -->
+            <%= @user.displayname %>
+          <!-- </a> -->
+
+        </h4>
+      </div>
+      <div class="panel-body">
+        <div class="col-md-7">
+          <ul>
+            <li>
+              <strong>Name</strong>
+              <%= @user.displayname %>
+            </li>
+
+            <li>
+              <strong>Mail:</strong>
+              <%= @user.mail %>
+            </li>
+            <li>
+              <strong>Site:</strong>
+              <%= @user.physicaldeliveryofficename %>
+            </li>
+            <li>
+              <strong>Title:</strong>
+              <%= @user.title %>
+            </li>
+            <li>
+              <strong>Phone Extention:</strong>
+              <%= @user.ipphone %>
+            </li>
+
+            <li><strong>Group Membership</strong>
+
+              <% groups = eval(@user.memberof) %>
+              <ul>
+                  <% groups.each do |v| %>
+                    <%= content_tag :li do %>
+                      <%= v.split(",")[0].gsub("CN=","")  %>
+                    <% end %>
+                  <% end %>
+              </ul>
+
+
+            </li>
+
+
+          </ul>
+        </div>
+        <div class="col-md-5">
+          <% if File.file?(Rails.root+"public/images/#{@user.username}.jpg") %>
+            <img class="img-responsive pull-right" src="/images/<%= @user.username %>.jpg" alt="<%= @user.displayname %>" title="<%= @user.displayname %>" >
+          <% end %>
+        </div>
+      </div>
+
+      <div class=" col-xs-12 text-center">
+          <br />
+          <%= link_to 'Back', users_path, :class => 'btn btn-primary', :role  => "button" %>
+
+          <% if UserPolicy.new(current_user,@user).import?  %>
+            <%= link_to "<i class='fa fa-refresh'></i> LDAP".html_safe, import_users_path(u: @user.username), :method => :post, :class => 'btn btn-primary', :role  => "button" %>
+          <% end %>
+          <br/>
+          <br/>
+      </div>
+
+
+    </div>

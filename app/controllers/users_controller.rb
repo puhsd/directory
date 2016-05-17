@@ -7,14 +7,18 @@ class UsersController < ApplicationController
   def index
 
     # @users = (params[:u] != "" ? User.all.order("ldap_attributes -> 'sn'") : User.find(:all, :conditions => ["id != ?", params[:u]]))
-    # @users = User.where(["id != ?", params[:u]])
-    # @users = User.search(params[:q])
+    if params[:q]
+        @users = User.where("ldap_attributes@> hstore('physicaldeliveryofficename', ?)", search_params[:site])
+    else
+        @users = User.all()
+      end
+    # @users = User.earch(params[:q])
 
-    puts params[:q]
+    # puts params[:q]
 
-    @q = User.ransack(params[:q])
-    puts @q.result.name
-    @users = @q.result
+    # @q = User.ransack(params[:q])
+    # puts @q.result.name
+    # @users = @q.result
   end
 
   # GET /users/1
@@ -102,4 +106,8 @@ class UsersController < ApplicationController
       params.require(:user).permit(:access_level)
     end
 
+    def search_params
+      # params.require(:user).permit(:object_guid, :username, :ldap_imported_at, :ldap_attributes)
+      params.require(:q).permit(:site) if params[:q]
+    end
 end

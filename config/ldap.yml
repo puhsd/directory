@@ -1,5 +1,5 @@
 development:
-  host: 10.80.20.10
+  host: 10.80.20.110
   port: 636
   encryption: :simple_tls
   attribute: sAMAccountName

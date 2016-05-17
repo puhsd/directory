@@ -1,0 +1,67 @@
+<!-- <p id="notice"><%= notice %></p> -->
+
+
+
+  <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingOne">
+        <h4 class="panel-title">
+          <!-- <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> -->
+            <%= @user.displayname %>
+          <!-- </a> -->
+
+        </h4>
+      </div>
+      <div class="panel-body">
+
+        <% if File.file?(Rails.root+"public/images/#{@user.username}.jpg") %>
+          <div class="col-md-5">
+
+              <img class="img-responsive pull-right" src="/images/<%= @user.username %>.jpg" alt="<%= @user.displayname %>" title="<%= @user.displayname %>" >
+
+          </div>
+        <% end %>
+
+        <div class="col-md-7">
+          <ul>
+            <li>
+              <strong>Name</strong>
+              <%= @user.displayname %>
+            </li>
+
+            <li>
+              <strong>Mail:</strong>
+              <%= @user.mail %>
+            </li>
+            <li>
+              <strong>Site:</strong>
+              <%= @user.physicaldeliveryofficename %>
+            </li>
+
+            <li>
+              <strong>Title:</strong>
+              <%= @user.title %>
+            </li>
+
+            <li>
+              <strong>Phone Extention:</strong>
+              <%= @user.ipphone %>
+            </li>
+<!-- 
+            <li>
+              <strong>Imported at:</strong>
+              <%= @user.ldap_imported_at %>
+            </li> -->
+
+          </ul>
+        </div>
+
+      </div>
+
+      <div class=" col-xs-12 text-center">
+          <br />
+          <%= link_to 'Back', users_path, :class => 'btn btn-primary', :role  => "button" %>
+          <br />
+      </div>
+
+
+    </div>

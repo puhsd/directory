@@ -1,31 +1,188 @@
 <div class="row">
-  <div class="col-xs-6">
-    <h1>Users</h1>
-  </div>
-</div>
+  <div class="col-lg-2">
+    <div class="input-group">
+        <input type="text" id="name" class="form-control" aria-label="name" placeholder="Name">
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
 
-<table class="table table-hover table-condensed">
+  <div class="col-lg-2">
+    <div class="input-group">
+      <input type="text"  id="title" class="form-control" aria-label="title" placeholder="Title">
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+
+  <div class="col-lg-2">
+    <div class="input-group">
+        <!-- <input type="text"  id="site" class="form-control" aria-label="site" placeholder="Site"> -->
+        <select id="site" class="form-control" aria-label="site" placeholder="Site">
+          <option>Select Site</option>
+          <option value="District Administrative Center">District Administrative Center</option>
+          <option value="Perris High School">Perris High School</option>
+          <option value="Paloma Valley High School">Paloma Valley High School</option>
+          <option value="California Military Institute">California Military Institute</option>
+          <option value="Student Services Center">Student Services Center</option>
+          <option value="Heritage High School">Heritage High School</option>
+          <option value="Pinacate Middle School">Pinacate Middle School</option>
+          <option value="Perris Lake High School">Perris Lake High School</option>
+          <option value="The Academy">The Academy</option>
+        </select>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+
+  <div class="col-lg-1 ">
+    <div class="input-group">
+      <p style="padding: 5px;" class="text-center"><a href="#" onclick="clearAll(); return false;" class="center-block"><i class="fa fa-times" aria-hidden="true"></i> Clear</a></p>
+
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+  <div class="col-lg-1">
+    <div class="input-group">
+
+      <button class="btn btn-default" type="button" onclick="search()">Go!</button>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+</div><!-- /.row -->
+
+
+
+
+<script>
+
+
+  //
+  //
+  // function getData(callback) {
+  //     $.getJSON( "users.json", function( data ) {
+  //       callback(data);
+  //     });
+  // }
+  //
+  //
+  //
+
+  var employees = null;
+
+
+  // $.getJSON( "users.json?q[site]=< % =params[:q][:site]%>", function( data ) {
+  $.getJSON( "users.json%>", function( data ) {
+    showData(data);
+    // showData(data);
+    employees = data;
+
+  });
+
+
+  // $( document ).ready(function(data) {
+  //     showData(employees);
+  // });
+
+
+  function showData(data){
+
+    $("#usertable > tbody").html("");
+
+    var table = document.getElementById('usertable').getElementsByTagName("TBODY")[0];
+
+    $.each( data, function( key, val ) {
+        // items.push( "<li id='" + key + "'>" + val + "</li>" );
+
+        var displayname = document.createElement('td');
+        var title = document.createElement('td');
+        var mail = document.createElement('td');
+        var site = document.createElement('td');
+        var extention = document.createElement('td');
+
+        var a = document.createElement('a');
+        $(a).attr('href',data[key].url).attr('id','xyz');
+        a.appendChild(document.createTextNode(data[key].displayname));
+
+        // $("#show").append("<p>" + data[key].displayname + "</p>")
+
+        displayname.appendChild(a);
+        title.appendChild(document.createTextNode(data[key].title));
+        mail.appendChild(document.createTextNode(data[key].mail));
+        site.appendChild(document.createTextNode(data[key].site));
+        extention.appendChild(document.createTextNode(data[key].ipphone));
+
+        var tr = document.createElement('tr');
+
+        tr.appendChild(displayname);
+        tr.appendChild(mail);
+        tr.appendChild(title);
+
+        tr.appendChild(site);
+        tr.appendChild(extention);
+
+
+        table.appendChild(tr);
+
+
+
+    // showUser(value)
+     });
+
+  }
+
+  function search(){
+
+    var name = document.getElementById('name').value;
+    // var mail = document.getElementById('mail').value;
+    var title = document.getElementById('title').value;
+    var site = document.getElementById('site').value;
+    // var extention = document.getElementById('extention').value;
+
+    var result = [];
+    // alert("sloba")
+    var add;
+    $.each( employees, function( key, val ) {
+
+        if (
+          (name != '' && val['displayname'].toLowerCase().match(name.toLowerCase())) ||
+          (name != '' && val['title'].toLowerCase().match(title.toLowerCase())) ||
+          (site != '' && val['site'].toLowerCase().match(site.toLowerCase()))
+      )
+          result.push(val)
+    });
+
+    //
+    showData(result);
+  }
+
+  function clearAll(){
+
+    document.getElementById('name').value = '';
+    // document.getElementById('mail').value = '';
+    document.getElementById('title').value = '';
+    document.getElementById('site').value = '';
+    // document.getElementById('extention').value = '';
+    showData(employees);
+
+  }
+
+
+</script>
+<div id="show"></div>
+
+
+<table id="usertable" class="table table-hover table-condensed">
   <thead>
     <tr>
-      <th><%= sort_link(@q, :sn, 'Last Name', default_order: :asc) %></th>
-      <th><%= sort_link(@q, :givenname, 'Given Name', default_order: :asc)  %></th>
-      <th><%= sort_link(@q, :title, 'Title', default_order: :asc)  %></th>
+      <th>Name</th>
+      <th>Mail</th>
+      <th>Title</th>
+      <th>Site</th>
       <th>Extension</th>
-      <th><%= sort_link(@q, :physicaldeliveryofficename, 'Site', default_order: :asc)  %></th>
-      <th><%= sort_link(@q, :updated_at, 'Updated', default_order: :desc)  %></th>
+
     </tr>
   </thead>
-
   <tbody>
-    <% @users.each do |user| %>
-      <%= content_tag :tr, class: ("danger" if user.disabled?) do -%>
-        <td><%= link_to user.sn, user %></td>
-        <td><%= link_to user.givenname, user %></td>
-        <td><%= user.title %></td>
-        <td><%= user.ipphone%></td>
-        <td><%= user.physicaldeliveryofficename %></td>
-        <td><%= local_time(user.updated_at, :short) %></td>
-      <% end %>
-    <% end %>
+
   </tbody>
 </table>
+
+
+<hr />
+
+<% @users.each do |user| %>
+  <%= render 'card_view', :user => user if user.physicaldeliveryofficename == "Heritage High School" %>
+<% end %>
