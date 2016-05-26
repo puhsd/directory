@@ -1,7 +1,18 @@
-<%= render 'admin_view' %>
-<div class="clearfix"></div>
+<% if current_user.admin? %>
+  <%= render 'admin_view' %>
+  <div class="clearfix"></div>
+  <%= render 'image_form' %>
+
+<% end %>
+<% if current_user.manager? %>
 <%= render 'manager_view' %>
 <div class="clearfix"></div>
-<%= render 'user_view' %>
-<div class="clearfix"></div>
-<%= render 'card_view', :user => @user  %>
+<% end %>
+<% if current_user.user? %>
+  <%= render 'user_view' %>
+  <div class="clearfix"></div>
+<% end %>
+<hr/>
+<div class="center-block">
+  <%= render 'card_view', :user => @user  %>
+</div>
