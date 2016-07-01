@@ -30,14 +30,6 @@
             <% end %>
 
 
-            <%= form_tag('/', method: :put, class: "navbar-form navbar-left") do %>
-              <div class="form-group">
-                  <%= text_field_tag(nil, nil, placeholder: "Search", class: "form-control") %>
-              </div>
-              <%= submit_tag("Search", class: "btn btn-default") %>
-            <% end %>
-
-
           </div>
           <p class="navbar-text navbar-right" style="padding-right:10px;">
             <% if current_user %>

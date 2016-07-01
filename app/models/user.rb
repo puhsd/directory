@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
   def site
       self.physicaldeliveryofficename
   end
-  
+
   def update_tracked_fields!(request)
     old_current, new_current = self.current_sign_in_at, Time.now.utc
     self.last_sign_in_at     = old_current || new_current
