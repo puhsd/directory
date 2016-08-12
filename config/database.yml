@@ -81,5 +81,4 @@ test:
 production:
   <<: *default
   database: directory_production
-  username: directory
-  password: <%= ENV['DIRECTORY_DATABASE_PASSWORD'] %>
+  username: deploy
