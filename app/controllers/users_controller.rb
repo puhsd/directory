@@ -11,7 +11,14 @@ class UsersController < ApplicationController
         @users = User.where("ldap_attributes@> hstore('physicaldeliveryofficename', ?)", search_params[:site])
     else
         @users = User.all()
+    end
+    respond_to do |format|
+      format.html
+      format.json
+      format.js do
+        render :json => @users, :callback => params[:callback]
       end
+    end
     # @users = User.earch(params[:q])
 
     # puts params[:q]
