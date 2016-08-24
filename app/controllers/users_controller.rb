@@ -13,11 +13,23 @@ class UsersController < ApplicationController
     else
         @users = User.all()
     end
+    @jsonp_users = @users.map do |user|
+        {
+          "id" => user.id,
+          "displayname" => user.displayname,
+          "mail" => user.mail,
+          "ipphone" => user.ipphone,
+          "site" => user.site,
+          "title" => user.title,
+          "imagefile"=> user.imagefile
+        }
+    end
+
     respond_to do |format|
       format.html
       format.json
       format.js do
-        render :json => @users, :callback => params[:callback]
+        render :json => @jsonp_users, :callback => params[:callback]
       end
     end
     # @users = User.earch(params[:q])
