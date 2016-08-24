@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: :index
   before_action :set_user, only: [:show, :edit, :update]
   # after_action :verify_authorized, except: [:index, :show, :edit]
 
