@@ -173,7 +173,7 @@
             card += '  <div class="caption">';
             card += '<h3>' + range[key].displayname + '</h3>';
             card += '<p><a href="#">' + range[key].mail + '</a><br/>';
-            card += 'Extention: '+ range[key].ipphone + '</p>';
+            card += 'Extension: '+ range[key].ipphone + '</p>';
 
             <% if current_user %>
               card += '<p class="text-center"><a href="/users/'+ range[key].id +'" class="btn btn-primary" role="button">View More</a></p>';
@@ -207,7 +207,7 @@
         var title = document.createElement('td');
         var mail = document.createElement('td');
         var site = document.createElement('td');
-        var extention = document.createElement('td');
+        var extension = document.createElement('td');
 
         var a = document.createElement('a');
         $(a).attr('href',data[key].url).attr('id','xyz');
@@ -219,7 +219,7 @@
         title.appendChild(document.createTextNode(data[key].title));
         mail.appendChild(document.createTextNode(data[key].mail));
         site.appendChild(document.createTextNode(data[key].site));
-        extention.appendChild(document.createTextNode(data[key].ipphone));
+        extension.appendChild(document.createTextNode(data[key].ipphone));
 
         var tr = document.createElement('tr');
 
@@ -228,7 +228,7 @@
         tr.appendChild(title);
 
         tr.appendChild(site);
-        tr.appendChild(extention);
+        tr.appendChild(extension);
 
 
         table.appendChild(tr);
@@ -246,7 +246,6 @@
     // var mail = document.getElementById('mail').value;
     var title = document.getElementById('title').value;
     var site = document.getElementById('site').value;
-    // var extention = document.getElementById('extention').value;
 
     var result = [];
     // alert("sloba")
@@ -270,7 +269,7 @@
     // document.getElementById('mail').value = '';
     document.getElementById('title').value = '';
     document.getElementById('site').value = '';
-    // document.getElementById('extention').value = '';
+    // document.getElementById('extension').value = '';
     showData(employees);
 
   }

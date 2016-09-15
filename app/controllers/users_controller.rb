@@ -8,6 +8,7 @@ class UsersController < ApplicationController
   def index
 
     # @users = (params[:u] != "" ? User.all.order("ldap_attributes -> 'sn'") : User.find(:all, :conditions => ["id != ?", params[:u]]))
+    puts params
     if params[:q]
         @users = User.where("ldap_attributes@> hstore('physicaldeliveryofficename', ?)", search_params[:site])
     else
@@ -15,7 +16,7 @@ class UsersController < ApplicationController
     end
     @jsonp_users = @users.map do |user|
         {
-          "id" => user.id,
+          # "id" => user.id,
           "displayname" => user.displayname,
           "mail" => user.mail,
           "ipphone" => user.ipphone,
