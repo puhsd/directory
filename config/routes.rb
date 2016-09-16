@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :titles
   # get 'sessions/create'
   # get 'sessions/destroy'
 
@@ -12,6 +13,11 @@ Rails.application.routes.draw do
   resources :users do
     post 'import', :on => :collection
   end
+
+  resources :titles do
+    post 'extract', :on => :collection
+  end
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   root :to => 'users#index'

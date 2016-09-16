@@ -1,0 +1,30 @@
+<h1>Titles</h1>
+
+
+
+<div class="col-xs-12 col-md-6" id="public_titles">
+  <h3>Public</h3>
+  <hr />
+
+  <%= render   @titles_public %>
+
+</div>
+<div class="col-xs-12 col-md-6" id="nonpublic">
+
+  <h3>Nonpublic</h3>
+  <hr />
+
+  <%= render   @titles_no_public %>
+</div>
+
+<br>
+
+<div class="clearfix"></div>
+
+<div class="text-center ">
+
+  <%= link_to 'New Title', new_title_path %> |
+
+  <%= link_to 'Sync Titles', extract_titles_path, :method => :post %>
+
+</div>

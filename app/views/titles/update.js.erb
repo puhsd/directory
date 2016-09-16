@@ -1,0 +1,5 @@
+<% if @title.public? %>
+  $('#edit_title_<%= @title.id %>').appendTo('#public_titles');
+<% else %>
+  $('#edit_title_<%= @title.id %>').appendTo('#nonpublic');
+<% end %>

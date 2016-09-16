@@ -123,6 +123,7 @@ class User < ActiveRecord::Base
         end
       end
     end
+    Title.extract
   end #Import
 
 

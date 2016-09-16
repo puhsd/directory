@@ -24,6 +24,9 @@
 
               <ul class="nav navbar-nav">
                 <li>
+                  <%= link_to "Titles".html_safe, titles_path, :class => 'btn' %>
+                </li>
+                <li>
                   <%= link_to "<i class='fa fa-refresh'></i> Full LDAP Sync".html_safe, import_users_path, :method => :post, :class => 'btn' %>
                 </li>
               </ul>

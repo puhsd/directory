@@ -1,0 +1,5 @@
+<%= form_for title, remote: true do |f| %>
+  <%= f.check_box :public %>
+  <%= f.label :public, title.name %>
+  <%= link_to "(remove)", title, method: :delete, data: {confirm: "Are you sure?"}, remote: true %>
+<% end %>

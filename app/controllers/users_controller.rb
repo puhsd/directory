@@ -9,12 +9,22 @@ class UsersController < ApplicationController
 
     # @users = (params[:u] != "" ? User.all.order("ldap_attributes -> 'sn'") : User.find(:all, :conditions => ["id != ?", params[:u]]))
     puts params
+    phone = 'No'
     if params[:q]
+        phone  = search_params[:phone]
+        puts phone
         @users = User.where("ldap_attributes@> hstore('physicaldeliveryofficename', ?)", search_params[:site])
+        puts @users.count
     else
         @users = User.all()
     end
-    @jsonp_users = @users.map do |user|
+
+    @users = @users.sort_by{ |u| [u.sn, u.givenname] }
+
+    @titles_public = Title.where(public: true).order(:name).pluck(:name)
+
+
+    @jsonp_users = @users.select{|user| ((@titles_public.include? user.title) && (phone == 'Yes' ? user.ipphone != '' : true )) }.map do |user|
         {
           # "id" => user.id,
           "displayname" => user.displayname,
@@ -25,6 +35,20 @@ class UsersController < ApplicationController
           "imagefile"=> user.imagefile
         }
     end
+
+    @jsonp_users.count
+
+    # @jsonp_users = @users.map do |user|
+    #     {
+    #       "id" => user.id,
+    #       "displayname" => user.displayname,
+    #       "mail" => user.mail,
+    #       "ipphone" => user.ipphone,
+    #       "site" => user.site,
+    #       "title" => user.title,
+    #       "imagefile"=> user.imagefile
+    #     }
+    # end
 
     respond_to do |format|
       format.html
@@ -129,6 +153,6 @@ class UsersController < ApplicationController
 
     def search_params
       # params.require(:user).permit(:object_guid, :username, :ldap_imported_at, :ldap_attributes)
-      params.require(:q).permit(:site) if params[:q]
+      params.require(:q).permit(:site, :phone) if params[:q]
     end
 end
