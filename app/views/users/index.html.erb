@@ -7,7 +7,7 @@
 
   <div class="col-lg-2">
     <div class="input-group">
-      <input type="text"  id="title" class="form-control" aria-label="title" placeholder="Title">
+      <input type="text"  id="title" class="form-control" aria-label="title" placeholder="Title" value="<%= params[:title] %>">
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
 
@@ -29,15 +29,28 @@
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
 
+  <div class="col-lg-2">
+    <div class="btn-group" data-toggle="buttons">
+    			<label class="btn btn-default active">
+    				<input name="view_type" name="view_type" value="cards" type="radio" checked="checked" ><i class="fa fa-file-o" aria-hidden="true"></i>
+    			</label>
+    			<label class="btn btn-default">
+    				<input name="view_type" value="list" type="radio"><i class="fa fa-list" aria-hidden="true"></i>
+
+    			</label>
+    </div>
+  </div>
+
   <div class="col-lg-1 ">
     <div class="input-group">
       <p style="padding: 5px;" class="text-center"><a href="#" onclick="clearAll(); return false;" class="center-block"><i class="fa fa-times" aria-hidden="true"></i> Clear</a></p>
 
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
+
+
   <div class="col-lg-1">
     <div class="input-group">
-
       <button class="btn btn-default" type="button" onclick="show_search()">Go!</button>
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
@@ -64,11 +77,15 @@
 
   // $.getJSON( "users.json?q[site]=< % =params[:q][:site]%>", function( data ) {
   $.getJSON( "users.json", function( data ) {
-    showData(data);
-    // showData(data);
     employees = data;
     populate_autocomplete(data);
 
+    <% if params['title'] %>
+      show_search()
+    <% else %>
+      showData(data);
+      showTableData(data);
+    <% end %>
 
   });
 
@@ -89,11 +106,6 @@
         source: names
       });
   }
-
-
-  // $( document ).ready(function(data) {
-  //     showData(employees);
-  // });
 
   function paginate(total, per_page, current_page){
 
@@ -243,12 +255,10 @@
   function show_search(page = 1){
 
     var name = document.getElementById('name').value;
-    // var mail = document.getElementById('mail').value;
     var title = document.getElementById('title').value;
     var site = document.getElementById('site').value;
 
     var result = [];
-    // alert("sloba")
     var add;
     $.each( employees, function( key, val ) {
         if (
@@ -261,38 +271,30 @@
 
     //
     showData(result, page);
+    showTableData(result);
   }
 
   function clearAll(){
 
     document.getElementById('name').value = '';
-    // document.getElementById('mail').value = '';
     document.getElementById('title').value = '';
     document.getElementById('site').value = '';
-    // document.getElementById('extension').value = '';
     showData(employees);
-
+    showTableData(employees);
   }
 
 
 </script>
 
-<!-- Nav tabs -->
-<!-- <ul class="nav nav-tabs" role="tablist">
-  <li role="presentation" class="active" ><a href="#list" aria-controls="list" role="tab" data-toggle="tab">List</a></li>
-  <li role="presentation" ><a href="#card" aria-controls="card" role="tab" data-toggle="tab">card view</a></li>
 
-</ul> -->
-
-<!-- Tab panes -->
-<!-- <div class="tab-content">
-  <div role="tabpanel" class="tab-pane active" id="list"> -->
-    <div id="show"></div>
+  <div id="cardview">
+    <div id="show" class="row" ></div>
     <div class="clearfix"></div>
     <div class="row" id="pagination"></div>
+  </div>
 
-
-    <!-- <table id="usertable" class="table table-hover table-condensed">
+  <div id="listview" style="display: none;">
+    <table id="usertable" class="table table-hover table-condensed">
       <thead>
         <tr>
           <th>Name</th>
@@ -306,29 +308,7 @@
       <tbody>
 
       </tbody>
-    </table> -->
+    </table>
+  <div>
 
-
-  <!-- </div>
-
-  <div role="tabpanel" class="tab-pane" id="card"> -->
-
-
-<!-- <div class="row"> <div class="col-sm-6 col-md-4"> <div class="thumbnail"> <img data-src="holder.js/100%x200" alt="100%x200" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTU1N2EyODU2MzEgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNTU3YTI4NTYzMSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS4xIj4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+" data-holder-rendered="true" style="height: 200px; width: 100%; display: block;"> <div class="caption"> <h3>Thumbnail label</h3> <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p> </div> </div> </div> <div class="col-sm-6 col-md-4"> <div class="thumbnail"> <img data-src="holder.js/100%x200" alt="100%x200" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTU1N2EyODg4ZmMgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNTU3YTI4ODhmYyI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS4xIj4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+" data-holder-rendered="true" style="height: 200px; width: 100%; display: block;"> <div class="caption"> <h3>Thumbnail label</h3> <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p> </div> </div> </div> <div class="col-sm-6 col-md-4"> <div class="thumbnail"> <img data-src="holder.js/100%x200" alt="100%x200" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTU1N2EyOGM3NWYgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNTU3YTI4Yzc1ZiI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS4xIj4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+" data-holder-rendered="true" style="height: 200px; width: 100%; display: block;"> <div class="caption"> <h3>Thumbnail label</h3> <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p> </div> </div> </div> </div> -->
-
-<!--
-    <div class="card-group">
-      <% @users.each do |user| %>
-       <% if user.physicaldeliveryofficename == "Heritage High School" %> -->
-
-            <!-- < %= render 'card_view', :user => user  %> -->
-<!--
-        <% end %>
-      <% end %>
-    </div> -->
-
-    <hr />
-
-
-  <!-- </div> -->
-<!-- </div> -->
+  <hr />

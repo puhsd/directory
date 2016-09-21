@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   def index
 
     # @users = (params[:u] != "" ? User.all.order("ldap_attributes -> 'sn'") : User.find(:all, :conditions => ["id != ?", params[:u]]))
-    puts params
+
     phone = 'No'
     if params[:q]
         phone  = search_params[:phone]
@@ -101,7 +101,11 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        if params[:user][:avatar]
+             @user.processimage(params[:user][:avatar].tempfile) if params[:user][:avatar].content_type == 'image/jpeg'
+        end
+          # @user.processimage(params)
+        format.html { redirect_to @user, notice: "User was successfully updated." }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
