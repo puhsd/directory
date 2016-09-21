@@ -4,8 +4,13 @@ class TitlesController < ApplicationController
   # GET /titles
   # GET /titles.json
   def index
+
     @titles_public = Title.where(public: true).order(:name)
     @titles_no_public = Title.where(public: false).order(:name)
+
+    user_titles = User.pluck(:ldap_attributes).map{|j| j['title'].split(',') }.flatten
+
+    @result = user_titles.each_with_object(Hash.new(0)) { |title,counts| counts[title] += 1 }
 
   end
 

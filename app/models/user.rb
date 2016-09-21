@@ -49,6 +49,11 @@ class User < ActiveRecord::Base
       self.physicaldeliveryofficename
   end
 
+  def processimage(tmpfile)
+    file = File.join("public/images","#{self.username}.jpg")
+    FileUtils.cp tmpfile.path, file
+  end
+
   def update_tracked_fields!(request)
     old_current, new_current = self.current_sign_in_at, Time.now.utc
     self.last_sign_in_at     = old_current || new_current
