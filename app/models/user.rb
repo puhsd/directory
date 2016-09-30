@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
   end
 
   def processimage(tmpfile)
-    file = File.join("public/images","#{self.username}.jpg")
+    file = File.join(Rails.root+"public/images","#{self.username}.jpg")
     FileUtils.cp tmpfile.path, file
   end
 

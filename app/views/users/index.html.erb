@@ -105,6 +105,24 @@
       $( "#name" ).autocomplete({
         source: names
       });
+
+      // $( "#name" ).on( "autocompleteselect", function( event, ui ) {show_search();} );
+
+      $( "#name" ).autocomplete({
+        select: function( event, ui ) {
+          $( "#name" ).val(ui.item.value)
+          show_search();
+        }
+      });
+
+      $( "#title" ).autocomplete({
+        select: function( event, ui ) {
+          $( "#title" ).val(ui.item.value)
+          show_search();
+        }
+      });
+
+
   }
 
   function paginate(total, per_page, current_page){
@@ -184,7 +202,7 @@
             card += '<img src="'+ (range[key].imagefile? range[key].imagefile : no_image)  +'" class="img-responsive img-circle"  data-holder-rendered="true" style=" display: block;">';
             card += '  <div class="caption">';
             card += '<h3>' + range[key].displayname + '</h3>';
-            card += '<p><a href="#">' + range[key].mail + '</a><br/>';
+            card += '<p><a href="mailto:'+ range[key].mail + '">' + range[key].mail + '</a><br/>';
             card += 'Extension: '+ range[key].ipphone + '</p>';
 
             <% if current_user %>
@@ -222,14 +240,20 @@
         var extension = document.createElement('td');
 
         var a = document.createElement('a');
-        $(a).attr('href',data[key].url).attr('id','xyz');
+        $(a).attr('href',data[key].url).attr('id','');
         a.appendChild(document.createTextNode(data[key].displayname));
+
+        var mail_a = document.createElement('a');
+        $(mail_a).attr('href','mailto:'+data[key].mail).attr('id','');
+        mail_a.appendChild(document.createTextNode(data[key].mail));
+
 
         // $("#show").append("<p>" + data[key].displayname + "</p>")
 
         displayname.appendChild(a);
         title.appendChild(document.createTextNode(data[key].title));
-        mail.appendChild(document.createTextNode(data[key].mail));
+        // mail.appendChild(document.createTextNode(data[key].mail));
+        mail.appendChild(mail_a);
         site.appendChild(document.createTextNode(data[key].site));
         extension.appendChild(document.createTextNode(data[key].ipphone));
 
