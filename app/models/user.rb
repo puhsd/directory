@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :username, use: :slugged
 # class User < ApplicationRecord
   enum access_level: { user: 0, manager: 1, admin: 2 }
 
