@@ -52,6 +52,7 @@ class User < ActiveRecord::Base
   def processimage(tmpfile)
     file = File.join(Rails.root+"public/images","#{self.username}.jpg")
     FileUtils.cp tmpfile.path, file
+    File.chmod(0644, file)
   end
 
   def update_tracked_fields!(request)
