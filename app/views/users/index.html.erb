@@ -206,7 +206,7 @@
             card += 'Extension: '+ range[key].ipphone + '</p>';
 
             <% if current_user %>
-              card += '<p class="text-center"><a href="/users/'+ range[key].id +'" class="btn btn-primary" role="button">View More</a></p>';
+              card += '<p class="text-center"><a href="/users/'+ range[key].friendly_id +'" class="btn btn-primary" role="button">View More</a></p>';
             <% end %>
 
             card += '  </div>'

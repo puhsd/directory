@@ -36,7 +36,7 @@
           </div>
           <p class="navbar-text navbar-right" style="padding-right:10px;">
             <% if current_user %>
-              Signed in as <strong><%= current_user.username %></strong>!
+              Signed in as <strong><%= link_to current_user.displayname, user_path(current_user) %></strong>!
               <%= link_to "Sign out", signout_path, id: "sign_out", class: "navbar-link" %>
             <% else %>
               <%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in", class: "navbar-link" %>
