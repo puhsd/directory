@@ -41,7 +41,7 @@ test:
   # <<: *AUTHORIZATIONS
 
 production:
-  host: 10.80.20.110
+  host: dc-noc.puhsd.org
   port: 636
   encryption: :simple_tls
   attribute: sAMAccountName
