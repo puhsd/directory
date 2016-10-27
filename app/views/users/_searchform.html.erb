@@ -1,0 +1,42 @@
+
+  <form class="form-inline">
+
+    <div class="form-group">
+      <label class="sr-only" for="name">Name</label>
+      <input type="text" class="form-control" id="name" placeholder="Name">
+    </div>
+
+    <div class="form-group">
+      <label class="sr-only" for="title">title</label>
+      <input type="text" class="form-control" id="title" placeholder="Title" value="<%= params[:title] %>">
+    </div>
+
+    <div class="form-group">
+        <label class="sr-only" for="site">Site</label>
+        <select id="site" class="form-control" placeholder="Site" onchange="show_search();">
+          <option value="">Select Site</option>
+          <option value="District Administrative Center">District Administrative Center</option>
+          <option value="Perris High School">Perris High School</option>
+          <option value="Paloma Valley High School">Paloma Valley High School</option>
+          <option value="California Military Institute">California Military Institute</option>
+          <option value="Student Services Center">Student Services Center</option>
+          <option value="Heritage High School">Heritage High School</option>
+          <option value="Pinacate Middle School">Pinacate Middle School</option>
+          <option value="Perris Lake High School">Perris Lake High School</option>
+          <option value="The Academy">The Academy</option>
+        </select>
+    </div>
+
+
+    <div class="btn-group" data-toggle="buttons">
+      	<label class="btn btn-default active">
+  				<input name="view_type" name="view_type" value="cards" type="radio" checked="checked" aria-label="Card View" ><i class="fa fa-file-o" aria-hidden="true"></i>
+  			</label>
+  			<label class="btn btn-default">
+  				<input name="view_type" value="list" type="radio" aria-label="List View" ><i class="fa fa-list" aria-hidden="true"></i>
+  			</label>
+    </div>
+
+    <a href="#" onclick="clearAll(); return false;" class="btn btn-default" ><i class="fa fa-times" aria-hidden="true"></i> Clear</a>
+
+    <button class="btn btn-primary" type="button" onclick="show_search()" >Go!</button>
