@@ -1,21 +1,31 @@
-<%= form_for @user do |f| %>
-  <% if @user.errors.any? %>
-    <div class="error_messages">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-      <ul>
-      <% @user.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+<div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        Avatar
 
-  <div class="field">
-    <%= f.label :avatar %><br />
-    <%= f.file_field :avatar %>
-    Please upload jpg file 300px x 300px
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+      </h4>
+    </div>
+    <div class="panel-body">
+      <%= form_for @user do |f| %>
+        <% if @user.errors.any? %>
+          <div class="error_messages">
+            <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+            <ul>
+            <% @user.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= f.label :avatar %><br />
+          <%= f.file_field :avatar %>
+          <p class="help-block">Please upload jpg file 300px x 300px</p>
+        </div>
+        <div class="actions">
+          <%= f.submit "Upload Avatar", class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
+</div>
