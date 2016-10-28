@@ -74,7 +74,8 @@
 
 
 
-    var p = '<nav>';
+    var p = '<div class="container">';
+        p = '<nav class="col-xs-12">';
         p += '<ul class="pagination">';
         p += '<li class="' + ((current_page == 1)? 'disabled' : '') + '"><a href="javascript:void(0);" onclick="show_search('+ (current_page-1) +');" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
         // p += '<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>';
@@ -109,10 +110,11 @@
         }
 
 
-        p += '<li class="' + ((current_page == Math.round(total/per_page))? 'disabled' : '') + '"><a href="javascript:void(0);" onclick="show_search('+ (current_page+1 > Math.round(total/per_page) ? Math.round(total/per_page) : current_page+1) +');" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
+        p += '<li class="' + ((current_page == Math.ceil(total/per_page))? 'disabled' : '') + '"><a href="javascript:void(0);" onclick="show_search('+ (current_page+1 > Math.ceil(total/per_page) ? Math.ceil(total/per_page) : current_page+1) +');" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
 
         p += '</ul>';
         p += '</nav>';
+        p += '</div>';
 
     $("#pagination").append(p);
 
@@ -120,6 +122,8 @@
 
 
   function showData(data, page = 1){
+
+    if ( page < 1 ) { page = 1; }
 
     var per_page = 25;
 
