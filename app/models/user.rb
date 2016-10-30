@@ -103,10 +103,6 @@ class User < ActiveRecord::Base
 
       user.username = entry["sAMAccountName"].first.downcase
 
-      # if user.new_record?
-      #   user.update_attribute(username: entry["sAMAccountName"].first.downcase)
-      # end
-
       @attrs.each do |key|
         value = entry[key.to_s]
         unless key.to_s == "objectguid"

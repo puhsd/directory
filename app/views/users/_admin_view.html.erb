@@ -42,13 +42,13 @@
               			<%= content_tag :strong, "#{key}: " %>
                     <% if key == "memberof" %>
                       <% groups = eval(value) %>
-                      <ul>
-                          <% groups.each do |v| %>
-                            <%= content_tag :li do %>
-                              <%= v.split(",")[0].gsub("CN=","")  %>
-                            <% end %>
+                      <%= content_tag :ul do -%>
+                        <% groups.each do |v| %>
+                          <%= content_tag :li do %>
+                            <%= v.split(",")[0].gsub("CN=","")  %>
                           <% end %>
-                      </ul>
+                        <% end %>
+                      <% end if groups %>
                     <% else %>
                        <%= value %>
                     <% end %>
