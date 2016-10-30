@@ -38,13 +38,13 @@
 
             <li><strong>Group Membership</strong>
 
-              <% groups = eval(@user.memberof) %>
+
               <ul>
-                  <% groups.each do |v| %>
-                    <%= content_tag :li do %>
-                      <%= v.split(",")[0].gsub("CN=","")  %>
-                    <% end %>
+                <% @user.groups.each do |group| %>
+                  <%= content_tag :li do %>
+                    <%= link_to group.samaccountname, group_path(group) %>
                   <% end %>
+                <% end %>
               </ul>
 
 

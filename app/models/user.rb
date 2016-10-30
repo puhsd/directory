@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  has_and_belongs_to_many :groups
+
   extend FriendlyId
   friendly_id :username, use: :slugged
 # class User < ApplicationRecord
@@ -106,7 +108,12 @@ class User < ActiveRecord::Base
     @ldap.search( :base => @ldap.base, :filter => @filter, :attributes => @attrs, :return_result => false) do |entry|
       user = User.find_or_create_by(object_guid: entry["objectGUID"].first.unpack("H*").first.to_s)
 
+      # entry.each{|k,v| puts "#{k} = #{v}"}
+
+
       user.username = entry["sAMAccountName"].first.downcase
+      user.distinguishedname = entry["dn"].first
+
 
       @attrs.each do |key|
         value = entry[key.to_s]

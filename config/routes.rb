@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :groups
   resources :titles
   # get 'sessions/create'
   # get 'sessions/destroy'
