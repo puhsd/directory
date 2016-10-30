@@ -1,5 +1,7 @@
 class Group < ApplicationRecord
   has_and_belongs_to_many :users
+  extend FriendlyId
+  friendly_id :samaccountname, use: [:slugged, :finders]
 
   def self.import_from_ldap(group = nil)
     @ldap = User.ldap_connection

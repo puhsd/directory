@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161028185542) do
+ActiveRecord::Schema.define(version: 20161029084308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,8 +38,10 @@ ActiveRecord::Schema.define(version: 20161028185542) do
     t.datetime "ldap_imported_at"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.string   "slug"
     t.index ["dn"], name: "index_groups_on_dn", unique: true, using: :btree
     t.index ["object_guid"], name: "index_groups_on_object_guid", unique: true, using: :btree
+    t.index ["slug"], name: "index_groups_on_slug", unique: true, using: :btree
   end
 
   create_table "groups_users", force: :cascade do |t|
