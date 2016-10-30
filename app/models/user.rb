@@ -43,6 +43,11 @@ class User < ActiveRecord::Base
   	!enabled?
   end
 
+  scope :enabled, -> { where("ldap_attributes @> hstore(?, ?)", "useraccountcontrol", "512") }
+
+  default_scope {enabled}
+
+
   def imagefile
      "images/#{self.username}.jpg" if File.file?(Rails.root+"public/images/#{self.username}.jpg")
   end

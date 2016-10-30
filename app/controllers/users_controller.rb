@@ -11,10 +11,7 @@ class UsersController < ApplicationController
 
     phone = 'No'
     if params[:q]
-        phone  = search_params[:phone]
-        puts phone
         @users = User.where("ldap_attributes@> hstore('physicaldeliveryofficename', ?)", search_params[:site])
-        puts @users.count
     else
         @users = User.all()
     end
