@@ -41,14 +41,13 @@
               		<%= content_tag :li do %>
               			<%= content_tag :strong, "#{key}: " %>
                     <% if key == "memberof" %>
-                      <% groups = eval(value) %>
                       <%= content_tag :ul do -%>
-                        <% groups.each do |v| %>
-                          <%= content_tag :li do %>
-                            <%= v.split(",")[0].gsub("CN=","")  %>
+                          <% @user.groups.each do |group| %>
+                            <%= content_tag :li do %>
+                              <%= link_to group.samaccountname, group_path(group) %>
+                            <% end %>
                           <% end %>
                         <% end %>
-                      <% end if groups %>
                     <% else %>
                        <%= value %>
                     <% end %>

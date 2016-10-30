@@ -32,6 +32,9 @@
           <% if UserPolicy.new(current_user,nil).import? %>
               <ul class="nav navbar-nav">
                 <li>
+                  <%= link_to "Groups".html_safe, groups_path %>
+                </li>
+                <li>
                   <%= link_to "Titles".html_safe, titles_path %>
                 </li>
                 <li>
