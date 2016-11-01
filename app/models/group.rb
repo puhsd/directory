@@ -21,6 +21,7 @@ class Group < ApplicationRecord
       group = Group.find_or_create_by(object_guid: entry["objectGUID"].first.unpack("H*").first.to_s)
 
       group.samaccountname = entry["sAMAccountName"].first
+      group.dn = entry["dn"].first
       group.mail = entry["mail"].first.downcase if entry.respond_to?(:mail)
       group.displayname = entry["displayname"].first if entry.respond_to?(:displayname)
 

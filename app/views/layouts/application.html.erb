@@ -38,7 +38,9 @@
                   <%= link_to "Titles".html_safe, titles_path %>
                 </li>
                 <li>
-                  <%= link_to "<i class='fa fa-refresh'></i> Full LDAP Sync".html_safe, import_users_path, :method => :post %>
+                  <!-- < %= link_to "<i class='fa fa-refresh'></i> Full LDAP Sync".html_safe, import_users_path, :method => :post %> -->
+                  <a href="/ldap_sync" class="pull-right"><i class='fa fa-refresh'></i> LDAP Sync</a>
+
                 </li>
 
               </ul>
@@ -60,8 +62,8 @@
     </header>
 
     <!-- <p id="notice" class="alert-success"></p> -->
-    <div class="row">
-      <div class="container">
+    <div class="container">
+      <div class="row">
         <% flash.each do |msg_type, message| %>
           <%= content_tag(:div, message, class: "alert #{bootstrap_class_for(msg_type)} alert-dismissible", role: 'alert') do %>
             <%= content_tag(:button, class: 'close', data: { dismiss: 'alert' }) do %>

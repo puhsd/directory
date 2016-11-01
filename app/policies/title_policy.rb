@@ -1,4 +1,4 @@
-class UserPolicy < ApplicationPolicy
+class TitlePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       # scope
@@ -13,18 +13,20 @@ class UserPolicy < ApplicationPolicy
   end
 
   def index?
-    true
-  end
-
-  def import?
-    user.admin? || (user.id == record.id if record) if user
-  end
-
-
-  def ldap_sync?
     user.admin? if user
   end
 
+  def show?
+    user.admin? if user
+  end
+
+  def destroy?
+    user.admin? if user
+  end
+
+  def extract?
+    user.admin? if user
+  end
 
   def update?
     user.admin? if user
