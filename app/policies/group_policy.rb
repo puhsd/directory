@@ -13,6 +13,14 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def index?
+    user.admin? or user.manager? if user
+  end
+
+  def show?
+    user.admin? or user.manager? if user
+  end
+
+  def destroy?
     user.admin? if user
   end
 

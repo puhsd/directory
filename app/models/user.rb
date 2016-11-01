@@ -96,12 +96,15 @@ class User < ActiveRecord::Base
   def self.import_from_ldap(username = nil)
     @ldap = User.ldap_connection
     if username == nil
-      @filter = Net::LDAP::Filter.eq('sAMAccountType', '805306368') #Should be faster than multiple attribute query
+      filter1 = Net::LDAP::Filter.eq('sAMAccountType', '805306368') #Should be faster than multiple attribute query
+      filter2 = Net::LDAP::Filter.eq('useraccountcontrol', '512') #Should be faster than multiple attribute query
+      @filter = Net::LDAP::Filter.join(filter1, filter2)
     else
       filter1 = Net::LDAP::Filter.eq('sAMAccountType', '805306368') #Should be faster than multiple attribute query
+      filter1 = Net::LDAP::Filter.eq('useraccountcontrol', '512') #Should be faster than multiple attribute query
       filter2 = Net::LDAP::Filter.eq('sAMAccountName', username.downcase)
       # guid_bin = [object_guid].pack("H*")
-      @filter = Net::LDAP::Filter.join(filter1, filter2)
+      @filter = Net::LDAP::Filter.join(filter1, filter2, filter3)
     end
     @attrs = LDAP_CONFIG["read-attributes"]
 
@@ -139,7 +142,7 @@ class User < ActiveRecord::Base
         end
       end
     end
-    Title.extract
+    # Title.extract
   end #Import
 
 

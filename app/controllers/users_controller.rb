@@ -121,6 +121,14 @@ class UsersController < ApplicationController
     end
   end
 
+
+  def ldap_sync
+      authorize User, :ldap_sync?
+      call_rake :ldap_sync
+      flash[:notice] = "LDAP Sync Initiated"
+      redirect_to users_url
+  end
+
   def import
     authorize(current_user, @user)
     if params[:u]

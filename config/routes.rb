@@ -8,10 +8,13 @@ Rails.application.routes.draw do
   get 'auth/failure', to: redirect('/')
   get 'signout', to: 'sessions#destroy', as: 'signout'
 
+  get 'ldap_sync', to: 'users#ldap_sync', as: 'ldap_sync'
+
+
   resources :sessions, only: [:create, :destroy]
 
 
-  resources :users do
+  resources :users  do
     post 'import', :on => :collection
   end
 

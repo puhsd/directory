@@ -4,7 +4,7 @@ class TitlesController < ApplicationController
   # GET /titles
   # GET /titles.json
   def index
-
+    authorize Title
     @titles_public = Title.where(public: true).order(:name)
     @titles_no_public = Title.where(public: false).order(:name)
 
@@ -17,20 +17,24 @@ class TitlesController < ApplicationController
   # GET /titles/1
   # GET /titles/1.json
   def show
+    authorize Title
   end
 
   # GET /titles/new
   def new
+    authorize Title
     @title = Title.new
   end
 
   # GET /titles/1/edit
   def edit
+    authorize Title
   end
 
   # POST /titles
   # POST /titles.json
   def create
+    authorize Title
     @title = Title.new(title_params)
 
     respond_to do |format|
@@ -48,6 +52,7 @@ class TitlesController < ApplicationController
   # PATCH/PUT /titles/1
   # PATCH/PUT /titles/1.json
   def update
+    authorize Title
     respond_to do |format|
       if @title.update(title_params)
         # format.html { redirect_to @title, notice: 'Title was successfully updated.' }
@@ -64,6 +69,7 @@ class TitlesController < ApplicationController
   # DELETE /titles/1
   # DELETE /titles/1.json
   def destroy
+    authorize Title
     @title.destroy
     respond_to do |format|
       format.html { redirect_to titles_url, notice: 'Title was successfully destroyed.' }
@@ -73,7 +79,7 @@ class TitlesController < ApplicationController
   end
 
   def extract
-
+    authorize Title
     if Title.extract
       redirect_to titles_url, notice: 'Successfully imported all the titles.'
     else
