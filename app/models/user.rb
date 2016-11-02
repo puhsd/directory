@@ -80,17 +80,26 @@ class User < ActiveRecord::Base
   end
 
   def self.ldap_connection(username = nil, password = nil)
-    ldap = Net::LDAP.new
-    ldap.host = LDAP_CONFIG["host"]
-    ldap.port = LDAP_CONFIG["port"]
-    ldap.base = LDAP_CONFIG["base"]
-    ldap.encryption LDAP_CONFIG["encryption"]
-    if username && password
-      ldap.auth "#{username}@puhsd.org", password
-    else
-      ldap.auth LDAP_CONFIG["admin_username"], LDAP_CONFIG["admin_password"]
-    end
-    return ldap
+    # ldap = Net::LDAP.new
+    # ldap.host = LDAP_CONFIG["host"]
+    # ldap.port = LDAP_CONFIG["port"]
+    # ldap.base = LDAP_CONFIG["base"]
+    # ldap.encryption LDAP_CONFIG["encryption"]
+    # if username && password
+    #   ldap.auth "#{username}@puhsd.org", password
+    # else
+    #   ldap.auth LDAP_CONFIG["admin_username"], LDAP_CONFIG["admin_password"]
+    # end
+    # return ldap
+    ldap = Net::LDAP.new(:host => LDAP_CONFIG["host"],
+                     :port => LDAP_CONFIG["port"],
+                     :encryption => { :method => :simple_tls },
+                     :base =>  LDAP_CONFIG["base"],
+                     :auth => {
+                        :method => :simple,
+                        :username => LDAP_CONFIG["admin_username"],
+                        :password => LDAP_CONFIG["admin_password"]
+                      })
   end
 
   def self.import_from_ldap(username = nil)
