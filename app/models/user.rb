@@ -106,26 +106,19 @@ class User < ActiveRecord::Base
     @ldap = User.ldap_connection
     if username == nil
       filter1 = Net::LDAP::Filter.eq('sAMAccountType', '805306368') #Should be faster than multiple attribute query
-      filter2 = Net::LDAP::Filter.eq('useraccountcontrol', '512') #Should be faster than multiple attribute query
-      @filter = Net::LDAP::Filter.join(filter1, filter2)
+      @filter = Net::LDAP::Filter.join(filter1)
     else
       filter1 = Net::LDAP::Filter.eq('sAMAccountType', '805306368') #Should be faster than multiple attribute query
-      filter1 = Net::LDAP::Filter.eq('useraccountcontrol', '512') #Should be faster than multiple attribute query
       filter2 = Net::LDAP::Filter.eq('sAMAccountName', username.downcase)
-      # guid_bin = [object_guid].pack("H*")
-      @filter = Net::LDAP::Filter.join(filter1, filter2, filter3)
+      @filter = Net::LDAP::Filter.join(filter1, filter2)
     end
     @attrs = LDAP_CONFIG["read-attributes"]
 
     @ldap.search( :base => @ldap.base, :filter => @filter, :attributes => @attrs, :return_result => false) do |entry|
       user = User.find_or_create_by(object_guid: entry["objectGUID"].first.unpack("H*").first.to_s)
 
-      # entry.each{|k,v| puts "#{k} = #{v}"}
-
-
       user.username = entry["sAMAccountName"].first.downcase
       user.distinguishedname = entry["dn"].first
-
 
       @attrs.each do |key|
         value = entry[key.to_s]
