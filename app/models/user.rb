@@ -143,16 +143,8 @@ class User < ActiveRecord::Base
       @filter = Net::LDAP::Filter.join(filter1)
     else
       filter1 = Net::LDAP::Filter.eq('sAMAccountType', '805306368') #Should be faster than multiple attribute query
-<<<<<<< HEAD
-      filter2 = Net::LDAP::Filter.eq('useraccountcontrol', '512') #Should be faster than multiple attribute query
-      filter3 = Net::LDAP::Filter.eq('sAMAccountName', username.downcase)
-      # guid_bin = [object_guid].pack("H*")
-      # @filter = Net::LDAP::Filter.join(filter1, filter2, filter3)
-      @filter = filter1 & filter2 & filter3
-=======
       filter2 = Net::LDAP::Filter.eq('sAMAccountName', username.downcase)
       @filter = Net::LDAP::Filter.join(filter1, filter2)
->>>>>>> 985092d33640a0e70a30f1f911c13122585cb184
     end
     @attrs = LDAP_CONFIG["read-attributes"]
 
