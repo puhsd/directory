@@ -147,6 +147,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def default_url
+    authorize(current_user, @user)
+    if params[:u]
+      @user = User.find_by(username: params[:u])
+      @user.set_default_url
+      redirect_to @user, notice: 'Successfully reset to default url.'
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -157,7 +165,7 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       # params.require(:user).permit(:object_guid, :username, :ldap_imported_at, :ldap_attributes)
-      params.require(:user).permit(:access_level)
+      params.require(:user).permit(:access_level, :link)
     end
 
     def search_params

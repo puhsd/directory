@@ -150,7 +150,10 @@
             card += '  <div class="caption">';
             card += '<h3>' + range[key].displayname + '</h3>';
             card += '<p><a href="mailto:'+ range[key].mail + '">' + range[key].mail + '</a><br/>';
-            card += 'Extension: '+ range[key].ipphone + '</p>';
+            card += 'Extension: '+ range[key].ipphone + '<br/>';
+            if (range[key].link) card += '<a href="'+ range[key].link + '">' + range[key].link + '</a>';
+            else card += "&nbsp;"
+            card += '</p>';
 
             <% if current_user %>
               card += '<p class="text-center"><a href="/users/'+ range[key].friendly_id +'" class="btn btn-primary" role="button">View More</a></p>';
