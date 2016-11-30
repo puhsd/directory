@@ -20,6 +20,9 @@ class UserPolicy < ApplicationPolicy
     user.admin? || (user.id == record.id if record) if user
   end
 
+  def default_url?
+    user.admin? || user.manager? || (user.id == record.id if record) if user
+  end
 
   def ldap_sync?
     user.admin? if user

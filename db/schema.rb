@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161029084308) do
+ActiveRecord::Schema.define(version: 20161121183436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20161029084308) do
     t.string   "avatar"
     t.string   "slug"
     t.string   "distinguishedname"
+    t.string   "link"
     t.index ["distinguishedname"], name: "index_users_on_distinguishedname", unique: true, using: :btree
     t.index ["object_guid"], name: "index_users_on_object_guid", unique: true, using: :btree
     t.index ["slug"], name: "index_users_on_slug", unique: true, using: :btree

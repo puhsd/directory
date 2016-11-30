@@ -64,20 +64,16 @@
         </div>
       </div>
     </div>
-</div>
 
-<div class="col-xs-12 text-center">
-    <br />
-    <%= link_to 'Back', users_path, :class => 'btn btn-primary', :role  => "button" %>
+    <div class="panel-footer text-center">
+      <% if UserPolicy.new(current_user,@user).import?  %>
+        <%= link_to "<i class='fa fa-refresh'></i> LDAP".html_safe, import_users_path(u: @user.username), :method => :post, :class => 'btn btn-primary', :role  => "button" %>
 
-    <% if UserPolicy.new(current_user,@user).import?  %>
-      <%= link_to "<i class='fa fa-refresh'></i> LDAP".html_safe, import_users_path(u: @user.username), :method => :post, :class => 'btn btn-primary', :role  => "button" %>
-    <% end %>
-    <br />
-    <br />
-    <% if UserPolicy.new(current_user,@user).update? %>
-            <%= render 'access_level_form', user: @user%>
-    <% end %>
-    <br />
+        <%= link_to "Set As Admin", user_path(id: @user.slug, "user[access_level]" => 'admin'), :method => :patch, :class => 'btn btn-primary', :role  => "button" unless @user.admin? %>
+        <%= link_to "Set As Manager", user_path(id: @user.slug, "user[access_level]" => 'manager'), :method => :patch, :class => 'btn btn-primary', :role  => "button"  unless @user.manager? %>
+        <%= link_to "Set As User", user_path(id: @user.slug, "user[access_level]" => 'user'), :method => :patch, :class => 'btn btn-primary', :role  => "button"  unless @user.user? %>
+
+      <% end %>
+    </div>
+
 </div>
-<div class="clearfix"></div>

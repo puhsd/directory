@@ -1,4 +1,10 @@
 class User < ActiveRecord::Base
+  require 'google/apis/plus_domains_v1'
+  require 'googleauth'
+  require 'googleauth/stores/file_token_store'
+
+  # require 'fileutils'
+
   has_and_belongs_to_many :groups
 
   extend FriendlyId
@@ -6,6 +12,14 @@ class User < ActiveRecord::Base
 # class User < ApplicationRecord
   enum access_level: { user: 0, manager: 1, admin: 2 }
 
+  # Google Plus API constants
+  OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
+  APPLICATION_NAME = 'Directory API Ruby Quickstart'
+  CLIENT_SECRETS_PATH = File.join(Rails.root,'config','client_secret.json')
+  # CREDENTIALS_PATH = File.join(Dir.home, '.credentials',"plus-domain-api.yaml")
+  CREDENTIALS_PATH = File.join(Rails.root,'config',"plus-domain-api.yaml")
+  SCOPE = Google::Apis::PlusDomainsV1::AUTH_PLUS_PROFILES_READ
+  # end of Google Plus API constants
 
 	LDAP_CONFIG = YAML.load(ERB.new(File.read("#{Rails.root}/config/ldap.yml")).result)[Rails.env]
 
@@ -64,6 +78,26 @@ class User < ActiveRecord::Base
     File.chmod(0644, file)
   end
 
+  def default_url
+    # self.getGooglePlusURL(self.mail)
+    self.googleService() unless @service
+    url = nil
+    begin
+
+      response = @service.get_person(mail)
+      url = response.url
+    rescue => e
+      puts e
+    end
+    return url
+  end
+
+  def set_default_url
+    self.link = default_url
+    self.save
+  end
+
+
   def update_tracked_fields!(request)
     old_current, new_current = self.current_sign_in_at, Time.now.utc
     self.last_sign_in_at     = old_current || new_current
@@ -110,10 +144,11 @@ class User < ActiveRecord::Base
       @filter = Net::LDAP::Filter.join(filter1, filter2)
     else
       filter1 = Net::LDAP::Filter.eq('sAMAccountType', '805306368') #Should be faster than multiple attribute query
-      filter1 = Net::LDAP::Filter.eq('useraccountcontrol', '512') #Should be faster than multiple attribute query
-      filter2 = Net::LDAP::Filter.eq('sAMAccountName', username.downcase)
+      filter2 = Net::LDAP::Filter.eq('useraccountcontrol', '512') #Should be faster than multiple attribute query
+      filter3 = Net::LDAP::Filter.eq('sAMAccountName', username.downcase)
       # guid_bin = [object_guid].pack("H*")
-      @filter = Net::LDAP::Filter.join(filter1, filter2, filter3)
+      # @filter = Net::LDAP::Filter.join(filter1, filter2, filter3)
+      @filter = filter1 & filter2 & filter3
     end
     @attrs = LDAP_CONFIG["read-attributes"]
 
@@ -171,6 +206,50 @@ class User < ActiveRecord::Base
       # user.oauth_expires_at = Time.at(auth.credentials.expires_at)
       # user.save!
     # end
+  end
+
+
+  def googleService
+    ##
+    # Ensure valid credentials, either by restoring from the saved credentials
+    # files or intitiating an OAuth2 authorization. If authorization is required,
+    # the user's default browser will be launched to approve the request.
+    #
+    # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
+    def authorize
+      FileUtils.mkdir_p(File.dirname(CREDENTIALS_PATH))
+
+      client_id = Google::Auth::ClientId.from_file(CLIENT_SECRETS_PATH)
+      token_store = Google::Auth::Stores::FileTokenStore.new(file: CREDENTIALS_PATH)
+      authorizer = Google::Auth::UserAuthorizer.new(
+        client_id, SCOPE, token_store)
+      user_id = 'default'
+      credentials = authorizer.get_credentials(user_id)
+      if credentials.nil?
+        url = authorizer.get_authorization_url(
+          base_url: OOB_URI)
+        puts "Open the following URL in the browser and enter the " +
+             "resulting code after authorization"
+        puts url
+        code = gets
+        credentials = authorizer.get_and_store_credentials_from_code(
+          user_id: user_id, code: code, base_url: OOB_URI)
+      end
+      credentials
+    end
+
+    @service = Google::Apis::PlusDomainsV1::PlusDomainsService.new
+    @service.client_options.application_name = APPLICATION_NAME
+    @service.authorization = authorize
+    @service
+  end
+
+
+
+  def getGooglePlusURL(email)
+    self.googleService() unless @service
+    response = @service.get_person(email)
+    response.url
   end
 
 

@@ -1,6 +1,6 @@
 
 
-<div class="col-sm-6 col-md-4">
+<!-- <div class="col-sm-6 col-md-4"> -->
     <h4 class="card-title" style="height:2em;"><%= user.title %></h4>
     <h6 class="card-subtitle text-muted" ><%= user.physicaldeliveryofficename %></h6>
     <div class="thumbnail">
@@ -12,13 +12,20 @@
       <% end %>
       <div class="caption">
         <h3><%= user.displayname%></h3>
-        <p><a href="#"><%= user.mail%></a><br/>
-          Extension: <%= user.ipphone%></p>
+        <p><a href="mailto:<%= user.mail %>"><%= user.mail%></a><br/>
+          Extension: <%= user.ipphone%><br/>
+          <% if user.link %>
+              <a href="<%= user.link %>" target="_blank"><%= user.link%></a>
+          <% else %>
+              &nbsp;
+          <% end %>
+
+        </p>
 
         <!-- <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p> -->
       </div>
     </div>
-</div>
+<!-- </div> -->
 
 <!--
 <div class="card">

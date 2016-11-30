@@ -48,6 +48,7 @@ gem 'local_time'
 gem 'net-ldap', :git => 'git://github.com/ruby-ldap/ruby-net-ldap.git'
 gem 'ransack', github: 'activerecord-hackery/ransack'
 gem "omniauth-google-oauth2"
+gem 'google-api-client', '~> 0.9'
 
 gem 'friendly_id', '~> 5.1.0' # Note: You MUST use 5.0.0 or greater for Rails 4.0+
 

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   resources :users  do
     post 'import', :on => :collection
+    post 'default_url', :on => :collection
   end
 
   resources :titles do
