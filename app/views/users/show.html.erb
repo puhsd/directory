@@ -8,7 +8,7 @@
     <%= render 'image_form' if current_user.admin?  %>
     <%= render 'manager_view' if current_user.manager?  %>
     <%= render 'user_view' if current_user.user?  %>
-    <%= render 'link_form' if policy(current_user).default_url?  %>
+    <%= render 'link_form' if policy(@user).default_url?  %>
 
   </div>
 </div>
