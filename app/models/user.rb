@@ -139,20 +139,29 @@ class User < ActiveRecord::Base
   def self.import_from_ldap(username = nil)
     @ldap = User.ldap_connection
     if username == nil
+      # filter1 = Net::LDAP::Filter.eq('sAMAccountType', '805306368') #Should be faster than multiple attribute query
+      # @filter =  filter1
+      # Net::LDAP::Filter.join(filter1)
       filter1 = Net::LDAP::Filter.eq('sAMAccountType', '805306368') #Should be faster than multiple attribute query
-      @filter = Net::LDAP::Filter.join(filter1)
+      filter2 = Net::LDAP::Filter.eq('useraccountcontrol', '512') #Should be faster than multiple attribute query
+      @filter = Net::LDAP::Filter.join(filter1, filter2)
+
     else
       filter1 = Net::LDAP::Filter.eq('sAMAccountType', '805306368') #Should be faster than multiple attribute query
-      filter2 = Net::LDAP::Filter.eq('sAMAccountName', username.downcase)
-      @filter = Net::LDAP::Filter.join(filter1, filter2)
+      filter2 = Net::LDAP::Filter.eq('useraccountcontrol', '512')
+      filter3 = Net::LDAP::Filter.eq('sAMAccountName', username.downcase)
+      @filter = Net::LDAP::Filter.join(filter1, filter2, filter3)
     end
     @attrs = LDAP_CONFIG["read-attributes"]
+
+    disable_before_time = Time.now
 
     @ldap.search( :base => @ldap.base, :filter => @filter, :attributes => @attrs, :return_result => false) do |entry|
       user = User.find_or_create_by(object_guid: entry["objectGUID"].first.unpack("H*").first.to_s)
 
       user.username = entry["sAMAccountName"].first.downcase
       user.distinguishedname = entry["dn"].first
+      user.active = true
 
       @attrs.each do |key|
         value = entry[key.to_s]
@@ -177,6 +186,10 @@ class User < ActiveRecord::Base
           user.save
         end
       end
+    end
+
+    if username == nil
+      User.where( 'ldap_imported_at < ?', disable_before_time ).update_all(active: false)
     end
     # Title.extract
   end #Import

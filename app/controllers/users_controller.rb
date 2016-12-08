@@ -11,9 +11,9 @@ class UsersController < ApplicationController
 
     phone = 'No'
     if params[:q]
-        @users = User.where("ldap_attributes@> hstore('physicaldeliveryofficename', ?)", search_params[:site])
+        @users = User.where("ldap_attributes@> hstore('physicaldeliveryofficename', ?)", search_params[:site]).where("active = true")
     else
-        @users = User.all()
+        @users = User.where("active = true").all()
     end
 
     @users = @users.sort_by{ |u| [u.sn, u.givenname] }
