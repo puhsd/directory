@@ -179,14 +179,9 @@ class User < ActiveRecord::Base
         end
       end
 
-      if user.new_record?
-        user.update_column(:ldap_imported_at, Time.now)
-      else
-        if user.changed?
-          user.ldap_imported_at =  Time.now
-          user.save
-        end
-      end
+      user.ldap_imported_at =  Time.now
+      user.save
+
     end
 
     if username == nil
