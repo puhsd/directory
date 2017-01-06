@@ -8,12 +8,24 @@ class Group < ApplicationRecord
 
 
     if group == nil
-      @filter = Net::LDAP::Filter.eq('sAMAccountType', '268435456') #Should be faster than multiple attribute query
-    else
+      puts "nil"
+      #group_object
       filter1 = Net::LDAP::Filter.eq('sAMAccountType', '268435456') #Should be faster than multiple attribute query
-      filter2 = Net::LDAP::Filter.eq('sAMAccountName', group.downcase)
-      # guid_bin = [object_guid].pack("H*")
-      @filter = Net::LDAP::Filter.join(filter1, filter2)
+      #non_security_group_object
+      filter2 = Net::LDAP::Filter.eq('sAMAccountType', '268435457') #Should be faster than multiple attribute query
+      @filter = filter1 | filter2
+    else
+      puts "else"
+      filter1 = Net::LDAP::Filter.eq('sAMAccountType', '268435456') #Should be faster than multiple attribute query
+      filter2 = Net::LDAP::Filter.eq('sAMAccountType', '268435457') #Should be faster than multiple attribute query
+
+      filter3 = Net::LDAP::Filter.eq('sAMAccountName', group.downcase)
+
+      @filter = filter1 | filter2
+      @filter = @filter & filter3
+
+      # @filter = Net::LDAP::Filter.join(filter1, filter2)
+      # @filter = Net::LDAP::Filter.join(@filter, filter3)
     end
 
     @ldap.search( :base => @ldap.base, :filter => @filter, :return_result => false) do |entry|
@@ -24,6 +36,8 @@ class Group < ApplicationRecord
       group.dn = entry["dn"].first
       group.mail = entry["mail"].first.downcase if entry.respond_to?(:mail)
       group.displayname = entry["displayname"].first if entry.respond_to?(:displayname)
+
+      puts group.samaccountname
 
       if entry["dn"].first.ends_with? "OU=Distribution,OU=Groups,OU=Staff,OU=Accounts,DC=PUHSD,DC=ORG"
         group.grouptype = "Distribution"
