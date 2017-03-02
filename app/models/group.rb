@@ -6,16 +6,18 @@ class Group < ApplicationRecord
   def self.import_from_ldap(group = nil)
     @ldap = User.ldap_connection
 
+    time1 = Time.new
+    puts "Current Time : " + time1.inspect
 
     if group == nil
-      puts "nil"
+      puts "Syncing All groups"
       #group_object
       filter1 = Net::LDAP::Filter.eq('sAMAccountType', '268435456') #Should be faster than multiple attribute query
       #non_security_group_object
       filter2 = Net::LDAP::Filter.eq('sAMAccountType', '268435457') #Should be faster than multiple attribute query
       @filter = filter1 | filter2
     else
-      puts "else"
+      puts "Syncing #{group.downcase}"
       filter1 = Net::LDAP::Filter.eq('sAMAccountType', '268435456') #Should be faster than multiple attribute query
       filter2 = Net::LDAP::Filter.eq('sAMAccountType', '268435457') #Should be faster than multiple attribute query
 
@@ -36,8 +38,6 @@ class Group < ApplicationRecord
       group.dn = entry["dn"].first
       group.mail = entry["mail"].first.downcase if entry.respond_to?(:mail)
       group.displayname = entry["displayname"].first if entry.respond_to?(:displayname)
-
-      puts group.samaccountname
 
       if entry["dn"].first.ends_with? "OU=Distribution,OU=Groups,OU=Staff,OU=Accounts,DC=PUHSD,DC=ORG"
         group.grouptype = "Distribution"
@@ -85,6 +85,7 @@ class Group < ApplicationRecord
 
       end
     end
+    puts "Syncing completed"
   end #
 
 private
