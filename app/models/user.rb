@@ -137,6 +137,8 @@ class User < ActiveRecord::Base
   end
 
   def self.import_from_ldap(username = nil)
+
+
     @ldap = User.ldap_connection
     if username == nil
       # filter1 = Net::LDAP::Filter.eq('sAMAccountType', '805306368') #Should be faster than multiple attribute query
@@ -156,6 +158,9 @@ class User < ActiveRecord::Base
     @attrs = LDAP_CONFIG["read-attributes"]
 
     disable_before_time = Time.now
+
+    puts "Current Time : " + disable_before_time.inspect
+    puts "Syncing All Users"
 
     @ldap.search( :base => @ldap.base, :filter => @filter, :attributes => @attrs, :return_result => false) do |entry|
       user = User.find_or_create_by(object_guid: entry["objectGUID"].first.unpack("H*").first.to_s)
@@ -188,6 +193,9 @@ class User < ActiveRecord::Base
       User.where( 'ldap_imported_at < ?', disable_before_time ).update_all(active: false)
     end
     # Title.extract
+
+    puts "Syncing All Users completed"
+
   end #Import
 
 
