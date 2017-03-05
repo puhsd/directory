@@ -32,7 +32,7 @@ gem 'jbuilder', '~> 2.0'
 
 # pundit used for authorization
 gem 'pundit'
-gem 'paperclip', git: 'git://github.com/thoughtbot/paperclip.git'
+gem 'paperclip'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -45,8 +45,8 @@ gem 'font-awesome-sass'
 
 gem 'local_time'
 
-gem 'net-ldap', :git => 'git://github.com/ruby-ldap/ruby-net-ldap.git'
-gem 'ransack', github: 'activerecord-hackery/ransack'
+gem 'net-ldap'
+gem 'ransack'
 gem "omniauth-google-oauth2"
 gem 'google-api-client', '~> 0.9'
 
