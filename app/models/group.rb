@@ -32,7 +32,7 @@ class Group < ApplicationRecord
 
     @ldap.search( :base => @ldap.base, :filter => @filter, :return_result => false) do |entry|
 
-      group = Group.find_or_create_by(object_guid: entry["objectGUID"].first.unpack("H*").first.to_s)
+      group = Group.find_or_create_by(object_guid: entry["objectguid"].first.unpack("H*").first.to_s)
 
       group.samaccountname = entry["sAMAccountName"].first
       group.dn = entry["dn"].first
