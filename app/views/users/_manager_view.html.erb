@@ -64,16 +64,12 @@
         </div>
       </div>
 
-      <!-- <div class=" col-xs-12 text-center">
-          <br />
-          <%= link_to 'Back', users_path, :class => 'btn btn-primary', :role  => "button" %>
-
+      <div class="panel-footer text-center">
           <% if UserPolicy.new(current_user,@user).import?  %>
             <%= link_to "<i class='fa fa-refresh'></i> LDAP".html_safe, import_users_path(u: @user.username), :method => :post, :class => 'btn btn-primary', :role  => "button" %>
           <% end %>
-          <br/>
-          <br/>
-      </div> -->
+
+      </div>
 
 
     </div>

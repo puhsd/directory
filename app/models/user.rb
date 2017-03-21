@@ -137,7 +137,8 @@ class User < ActiveRecord::Base
   end
 
   def self.import_from_ldap(username = nil)
-
+    disable_before_time = Time.now
+    puts "Current Time : " + disable_before_time.inspect
 
     @ldap = User.ldap_connection
     if username == nil
@@ -147,6 +148,7 @@ class User < ActiveRecord::Base
       filter1 = Net::LDAP::Filter.eq('sAMAccountType', '805306368') #Should be faster than multiple attribute query
       filter2 = Net::LDAP::Filter.eq('useraccountcontrol', '512') #Should be faster than multiple attribute query
       @filter = Net::LDAP::Filter.join(filter1, filter2)
+      puts "Syncing All Users"
 
     else
       filter1 = Net::LDAP::Filter.eq('sAMAccountType', '805306368') #Should be faster than multiple attribute query
@@ -154,21 +156,23 @@ class User < ActiveRecord::Base
       filter3 = Net::LDAP::Filter.eq('sAMAccountName', username.downcase)
       @filter = Net::LDAP::Filter.join(filter1, filter2)
       @filter = Net::LDAP::Filter.join(@filter, filter3)
+      puts "Syncing #{username}"
     end
     @attrs = LDAP_CONFIG["read-attributes"]
 
-    disable_before_time = Time.now
 
-    puts "Current Time : " + disable_before_time.inspect
-    puts "Syncing All Users"
+
+
 
     @ldap.search( :base => @ldap.base, :filter => @filter, :attributes => @attrs, :return_result => false) do |entry|
-      user = User.find_or_create_by(object_guid: entry["objectGUID"].first.unpack("H*").first.to_s)
+
+      user = User.find_by(object_guid: entry["objectguid"].first.unpack("H*").first.to_s) || User.new
+
+      user.object_guid = entry["objectguid"].first.unpack("H*").first.to_s unless user.object_guid
 
       user.username = entry["sAMAccountName"].first.downcase
       user.distinguishedname = entry["dn"].first
       user.active = true
-
       @attrs.each do |key|
         value = entry[key.to_s]
         unless key.to_s == "objectguid"
@@ -183,10 +187,8 @@ class User < ActiveRecord::Base
           end
         end
       end
-
       user.ldap_imported_at =  Time.now
       user.save
-
     end
 
     if username == nil
@@ -194,8 +196,9 @@ class User < ActiveRecord::Base
     end
     # Title.extract
 
-    puts "Syncing All Users completed"
+    puts "Syncing completed"
 
+    return User
   end #Import
 
 

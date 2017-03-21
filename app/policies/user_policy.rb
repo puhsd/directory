@@ -17,7 +17,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def import?
-    user.admin? || (user.id == record.id if record) if user
+    user.admin?  || user.manager? || (user.id == record.id if record) if user
   end
 
   def default_url?
