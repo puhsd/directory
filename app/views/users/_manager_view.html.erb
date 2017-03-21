@@ -66,7 +66,7 @@
 
       <div class="panel-footer text-center">
           <% if UserPolicy.new(current_user,@user).import?  %>
-            <%= link_to "<i class='fa fa-refresh'></i> LDAP".html_safe, import_users_path(u: @user.username), :method => :post, :class => 'btn btn-primary', :role  => "button" %>
+            <%= link_to "<i class='fa fa-refresh'></i> Sync".html_safe, import_users_path(u: @user.username), :method => :post, :class => 'btn btn-primary', :role  => "button" %>
           <% end %>
 
       </div>
