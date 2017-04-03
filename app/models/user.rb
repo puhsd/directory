@@ -201,7 +201,7 @@ class User < ActiveRecord::Base
     return User
   end #Import
 
-  def self.load_users(current_user, site = "", hasphone = "")
+  def self.load_users(current_user, site = "", hasphone = "no")
 
     if site != ""
         users = User.where("ldap_attributes@> hstore('physicaldeliveryofficename', ?)", site).where("active = true")
@@ -209,7 +209,7 @@ class User < ActiveRecord::Base
         users = User.where("active = true")
     end
 
-    if hasphone.downcase == "yes"
+    if hasphone && hasphone.downcase == "yes"
       users = users.select{|user| (hasphone.downcase == 'yes' ? user.ipphone != '' : true ) }
     end
 
