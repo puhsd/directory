@@ -201,7 +201,43 @@ class User < ActiveRecord::Base
     return User
   end #Import
 
+  def self.load_users(current_user, site = "", hasphone = "")
 
+    if site != ""
+        users = User.where("ldap_attributes@> hstore('physicaldeliveryofficename', ?)", site).where("active = true")
+    else
+        users = User.where("active = true")
+    end
+
+    if hasphone.downcase == "yes"
+      users = users.select{|user| (hasphone.downcase == 'yes' ? user.ipphone != '' : true ) }
+    end
+
+    users = users.sort_by{ |u| [u.sn, u.givenname] }
+
+    if (current_user == nil)
+      titles_public = Title.where(public: true).order(:name).pluck(:name)
+      users = users.select{|user| (titles_public.include? user.title) }
+    end
+
+    return users
+
+  end
+
+  def self.jsonp_format(users)
+      response = users.map do |user|
+          {
+            # "id" => user.id,
+            "displayname" => user.displayname,
+            "mail" => user.mail,
+            "ipphone" => user.ipphone,
+            "site" => user.site,
+            "title" => user.title,
+            "imagefile"=> user.imagefile
+          }
+      end
+      return response
+  end
 
 	def self.from_omniauth(auth)
 
