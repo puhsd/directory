@@ -42,3 +42,5 @@ bower.json
 
 #Ignore development env variables
 .env
+
+config/ldap.yml
