@@ -24,6 +24,10 @@ class UserPolicy < ApplicationPolicy
     user.admin? || user.manager? || (user.id == record.id if record) if user
   end
 
+  def printcode?
+    user.admin? || user.manager? || (user.id == record.id if record) if user
+  end
+
   def ldap_sync?
     user.admin? if user
   end

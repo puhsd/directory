@@ -46,22 +46,17 @@
               <strong>Phone Extension:</strong>
               <%= @user.ipphone %>
             </li>
-<!--
-            <li>
-              <strong>Imported at:</strong>
-              <%= @user.ldap_imported_at %>
-            </li> -->
 
+            <% if policy(@user).printcode?  %>
+              <li>
+                <strong>Print Code:</strong>
+                <%= @user.extensionattribute10 %>
+              </li>
+            <% end %>
           </ul>
         </div>
 
       </div>
-
-      <!-- <div class=" col-xs-12 text-center">
-          <br />
-          <%= link_to 'Back', users_path, :class => 'btn btn-primary', :role  => "button" %>
-          <br />
-      </div> -->
 
 
     </div>

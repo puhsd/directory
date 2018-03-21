@@ -1,14 +1,14 @@
-<%= render 'admin_view' if current_user.admin?  %>
+<%= render 'admin_view' if current_user && current_user.admin?  %>
 
 <div class="row">
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
     <%= render 'card_view', :user => @user  %>
   </div>
   <div class="col-xs-12 col-sm-6 col-md-6 col-lg-8">
-    <%= render 'image_form' if current_user.admin?  %>
-    <%= render 'manager_view' if current_user.manager?  %>
-    <%= render 'user_view' if current_user.user?  %>
-    <%= render 'link_form' if policy(@user).default_url?  %>
+    <%= render 'image_form' if current_user && current_user.admin?  %>
+    <%= render 'manager_view' if current_user && current_user.manager?  %>
+    <%= render 'user_view' if current_user && current_user.user?  %>
+    <%= render 'link_form' if current_user && policy(@user).default_url?  %>
 
   </div>
 </div>
