@@ -43,7 +43,7 @@ gem 'paperclip'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'font-awesome-sass'
 
-gem 'local_time'
+gem 'local_time', '~> 1.0', '>= 1.0.3'
 
 gem 'net-ldap'
 gem 'ransack'
