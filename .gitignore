@@ -20,6 +20,7 @@ config/secrets.yml
 config/local_env.yml
 config/client_secret.json
 config/plus-domain-api.yaml
+config/ldap.yml
 
 ## Environment normalisation:
 /.bundle
@@ -42,5 +43,3 @@ bower.json
 
 #Ignore development env variables
 .env
-
-config/ldap.yml
