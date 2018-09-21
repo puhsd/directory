@@ -166,7 +166,7 @@ class User < ActiveRecord::Base
 
     @ldap.search( :base => @ldap.base, :filter => @filter, :attributes => @attrs, :return_result => false) do |entry|
 
-      user = User.find_by(object_guid: entry["objectguid"].first.unpack("H*").first.to_s) || User.new
+      user = User.unscoped.find_by(object_guid: entry["objectguid"].first.unpack("H*").first.to_s) || User.new
 
       user.object_guid = entry["objectguid"].first.unpack("H*").first.to_s unless user.object_guid
 
