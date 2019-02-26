@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   # get 'sessions/create'
   # get 'sessions/destroy'
 
-  get 'auth/:provider/callback', to: 'sessions#create'
+  get 'login', to: 'sessions#create',  as: :create_login
   get 'auth/failure', to: redirect('/')
   get 'signout', to: 'sessions#destroy', as: 'signout'
 

@@ -51,7 +51,7 @@
                 Signed in as <strong><%= link_to current_user.givenname, user_path(current_user) %></strong>!
                 <%= link_to "Sign out", signout_path, id: "sign_out", class: "navbar-link" %>
               <% else %>
-                <%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in", class: "navbar-link" %>
+                <%= link_to "Sign in with Google", '/google_sign_in/authorization?'+{proceed_to: proceed_to_url}.to_param, id: "sign_in", method: :post, class: "navbar-link" %>
               <% end %>
             </p>
           </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161208153159) do
+ActiveRecord::Schema.define(version: 20171102181949) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,47 @@ ActiveRecord::Schema.define(version: 20161208153159) do
     t.index ["user_id"], name: "index_groups_users_on_user_id", using: :btree
   end
 
+  create_table "request_updates", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "request_id"
+    t.integer  "state",      default: 0
+    t.text     "comment"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.index ["request_id"], name: "index_request_updates_on_request_id", using: :btree
+    t.index ["user_id"], name: "index_request_updates_on_user_id", using: :btree
+  end
+
+  create_table "requests", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "firstname"
+    t.string   "lastname"
+    t.integer  "title_id"
+    t.integer  "employeetype"
+    t.string   "accountname"
+    t.string   "email"
+    t.integer  "site_id"
+    t.string   "employeenumber"
+    t.datetime "startdate"
+    t.datetime "enddate"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "noenddate"
+    t.integer  "req_type",       default: 0
+    t.string   "department"
+    t.integer  "state",          default: 0
+    t.index ["site_id"], name: "index_requests_on_site_id", using: :btree
+    t.index ["title_id"], name: "index_requests_on_title_id", using: :btree
+    t.index ["user_id"], name: "index_requests_on_user_id", using: :btree
+  end
+
+  create_table "sites", force: :cascade do |t|
+    t.string   "abbr"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "titles", force: :cascade do |t|
     t.string   "name"
     t.boolean  "public",     default: true
@@ -79,4 +120,9 @@ ActiveRecord::Schema.define(version: 20161208153159) do
 
   add_foreign_key "groups_users", "groups"
   add_foreign_key "groups_users", "users"
+  add_foreign_key "request_updates", "requests"
+  add_foreign_key "request_updates", "users"
+  add_foreign_key "requests", "sites"
+  add_foreign_key "requests", "titles"
+  add_foreign_key "requests", "users"
 end
