@@ -1,4 +1,4 @@
-class AddSlugToGroups < ActiveRecord::Migration[5.0]
+class AddSlugToGroups < ActiveRecord::Migration[5.2]
   def up
     add_column :groups, :slug, :string
     add_index :groups, :slug, unique: true

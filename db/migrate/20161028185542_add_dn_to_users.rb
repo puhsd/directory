@@ -1,4 +1,4 @@
-class AddDnToUsers < ActiveRecord::Migration[5.0]
+class AddDnToUsers < ActiveRecord::Migration[5.2]
   def up
     add_column :users, :distinguishedname, :string
     # User.import_from_ldap

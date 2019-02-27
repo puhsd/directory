@@ -1,4 +1,4 @@
-class CreateUsers < ActiveRecord::Migration[5.0]
+class CreateUsers < ActiveRecord::Migration[5.2]
   def change
   	enable_extension "hstore"
     create_table :users do |t|
