@@ -3,7 +3,7 @@ lock "~> 3.11"
 
 set :application, 'directory'
 # set :repo_url, 'git@example.com:me/my_repo.git'
-set :repo_url, 'git@github.com:puhsd/directory.git'
+set :repo_url, 'git://github.com/puhsd/directory.git'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -43,7 +43,7 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/imag
 # set :ssh_options, verify_host_key: :secure
 
 set :rbenv_type, :user # or :system, depends on your rbenv setup
-set :rbenv_ruby, '2.5.1'
+set :rbenv_ruby, '2.5.3'
 set :bundle_binstubs, nil
 
 namespace :deploy do

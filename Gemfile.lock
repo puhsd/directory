@@ -283,7 +283,7 @@ DEPENDENCIES
   capistrano-bundler (~> 1.1.2)
   capistrano-passenger
   capistrano-rails (~> 1.1.1)
-  capistrano-rbenv (~> 2.0)
+  capistrano-rbenv (~> 2.1)
   coffee-rails
   font-awesome-sass
   friendly_id (~> 5.1.0)
